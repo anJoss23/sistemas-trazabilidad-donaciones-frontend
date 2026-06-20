@@ -1,0 +1,35 @@
+<div class="container mt-4">
+  <h3>Gestión de Estados de Equipo</h3>
+  <form (ngSubmit)="guardar()" class="mb-4">
+    <input
+      [(ngModel)]="estado.nombreEstado"
+      name="nombre"
+      class="form-control mb-2"
+      placeholder="Nombre del estado"
+      required
+    />
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </form>
+
+  <div *ngIf="mensajeExito" class="alert alert-success">
+    ¡Estado {{ mensajeAccion }} exitosamente!
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nombre del Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let e of lista">
+        <td>{{ e.nombreEstado }}</td>
+        <td>
+          <button (click)="editar(e)" class="btn btn-warning btn-sm me-2">Editar</button>
+          <button (click)="eliminar(e.estadoId)" class="btn btn-danger btn-sm">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

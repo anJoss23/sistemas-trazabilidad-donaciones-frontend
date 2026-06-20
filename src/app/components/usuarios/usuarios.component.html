@@ -1,0 +1,72 @@
+<div class="container mt-4">
+  <div class="card p-4 shadow-sm">
+    <h3 class="mb-3">Gestión de Usuarios</h3>
+    <form (ngSubmit)="guardar()">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="fw-bold">Nombre</label>
+          <input [(ngModel)]="usuario.nombre" name="nombre" class="form-control" required />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="fw-bold">Correo</label>
+          <input [(ngModel)]="usuario.correo" name="correo" class="form-control" required />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="fw-bold">Contraseña</label>
+          <input
+            type="password"
+            [(ngModel)]="usuario.contrasena"
+            name="pass"
+            class="form-control"
+          />
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="fw-bold">Rol</label>
+          <select [(ngModel)]="usuario.rol.rolId" name="rol" class="form-control" required>
+            <option [ngValue]="null">-- Seleccione el Rol --</option>
+            <option *ngFor="let r of listaRoles" [value]="r.rolId">
+              {{ r.nombreRol }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">Guardar Usuario</button>
+      <button
+        type="button"
+        class="btn btn-secondary mt-3 ms-2"
+        (click)="limpiar()"
+        *ngIf="usuario.usuarioId"
+      >
+        Cancelar
+      </button>
+    </form>
+  </div>
+
+  <table class="table table-bordered table-hover shadow-sm mt-4 bg-white">
+    <thead class="table-dark">
+      <tr>
+        <th>Nombre</th>
+        <th>Correo</th>
+        <th>Rol</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of lista">
+        <td>{{ u.nombre }}</td>
+        <td>{{ u.correo }}</td>
+        <td>
+          <span class="badge bg-info text-dark">{{ u.rol?.nombreRol || 'No asignado' }}</span>
+        </td>
+        <td>
+          <button (click)="editar(u)" class="btn btn-warning btn-sm me-2">Editar</button>
+          <button (click)="eliminar(u.usuarioId)" class="btn btn-danger btn-sm">Eliminar</button>
+        </td>
+      </tr>
+      <tr *ngIf="lista.length === 0">
+        <td colspan="4" class="text-center py-4 text-muted">Aún no hay usuarios registrados.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

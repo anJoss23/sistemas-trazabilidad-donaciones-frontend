@@ -1,0 +1,63 @@
+<div class="d-flex">
+  <nav class="bg-dark text-white p-3" style="width: 250px; min-height: 100vh" *ngIf="showMenu">
+    <h4 class="text-center">EcoDigital</h4>
+    <hr />
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li class="nav-item">
+        <a routerLink="/dashboard" class="nav-link text-white" routerLinkActive="active"
+          >Dashboard</a
+        >
+      </li>
+      <li>
+        <a routerLink="/equipos" class="nav-link text-white" routerLinkActive="active">Equipos</a>
+      </li>
+      <li>
+        <a routerLink="/donantes" class="nav-link text-white" routerLinkActive="active">Donantes</a>
+      </li>
+      <li>
+        <a routerLink="/instituciones" class="nav-link text-white" routerLinkActive="active"
+          >Instituciones</a
+        >
+      </li>
+      <li>
+        <a routerLink="/usuarios" class="nav-link text-white" routerLinkActive="active">Usuarios</a>
+      </li>
+      <li>
+        <a routerLink="/despachos" class="nav-link text-white" routerLinkActive="active"
+          >Despachos</a
+        >
+      </li>
+      <li>
+        <a routerLink="/historial" class="nav-link text-white" routerLinkActive="active"
+          >Historial</a
+        >
+      </li>
+      <li>
+        <a routerLink="/tipo-equipo" class="nav-link text-white" routerLinkActive="active"
+          >Tipos de Equipo</a
+        >
+      </li>
+      <li>
+        <a routerLink="/estados-equipo" class="nav-link text-white" routerLinkActive="active"
+          >Estados de Equipo</a
+        >
+      </li>
+      <li>
+        <a routerLink="/roles" class="nav-link text-white" routerLinkActive="active"
+          >Roles de Usuario</a
+        >
+      </li>
+      <li>
+        <a routerLink="/reportes" class="nav-link text-white" routerLinkActive="active">
+          Reportes
+        </a>
+      </li>
+    </ul>
+    <hr />
+    <button (click)="logout()" class="btn btn-danger w-100">Cerrar Sesión</button>
+  </nav>
+
+  <main [class.flex-grow-1]="showMenu" class="p-4">
+    <router-outlet></router-outlet>
+  </main>
+</div>

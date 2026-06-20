@@ -1,0 +1,44 @@
+<div class="container mt-4">
+  <div class="card p-4 shadow-sm mb-4">
+    <h3>Gestión de Tipos de Equipo</h3>
+    <form (ngSubmit)="guardar()">
+      <div class="row">
+        <div class="col-md-9 mb-3">
+          <label>Nombre del Tipo (Ej. Laptop, Monitor, Impresora)</label>
+          <input
+            [(ngModel)]="tipoEquipo.nombreTipo"
+            name="nombreTipo"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="col-md-3 mb-3 d-flex align-items-end">
+          <button type="submit" class="btn btn-info w-100">Guardar</button>
+        </div>
+      </div>
+      <div *ngIf="mensajeExito" class="alert alert-success mt-3">
+        ¡Tipo de equipo {{ mensajeAccion }} exitosamente!
+      </div>
+    </form>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre del Tipo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let t of lista">
+        <td>{{ t.tipoId }}</td>
+        <td>{{ t.nombreTipo }}</td>
+        <td>
+          <button (click)="editar(t)" class="btn btn-warning btn-sm me-2">Editar</button>
+          <button (click)="eliminar(t.tipoId)" class="btn btn-danger btn-sm">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,218 @@
+<div class="container mt-4">
+  <div class="card p-4 shadow-sm mb-4 border-success">
+    <h3 class="text-success mb-3">Gestión de Despachos / Donaciones</h3>
+    <form (ngSubmit)="guardar()">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="fw-bold">Institución Destino</label>
+          <select
+            [(ngModel)]="despacho.institucion.institucionId"
+            name="institucionId"
+            class="form-select"
+            required
+          >
+            <option [ngValue]="null">-- Seleccione el Colegio --</option>
+            <option *ngFor="let inst of listaInstituciones" [value]="inst.institucionId">
+              {{ inst.nombreColegio }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="fw-bold">Usuario / Técnico que despacha</label>
+          <select
+            [(ngModel)]="despacho.usuarioResponsable.usuarioId"
+            name="usuarioId"
+            class="form-select"
+            required
+          >
+            <option [ngValue]="null">-- Seleccione Responsable --</option>
+            <option *ngFor="let u of listaUsuarios" [value]="u.usuarioId">{{ u.nombre }}</option>
+          </select>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label class="fw-bold">N° Guía de Remisión</label>
+          <input
+            [(ngModel)]="despacho.numeroGuiaRemision"
+            name="guia"
+            class="form-control"
+            placeholder="Ej. 001-000554"
+            required
+          />
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label class="fw-bold">Fecha de Envío</label>
+          <input
+            type="date"
+            [(ngModel)]="despacho.fechaEnvio"
+            name="fechaEnvio"
+            class="form-control"
+            required
+          />
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label class="fw-bold">Documento de Referencia</label>
+          <input
+            [(ngModel)]="despacho.documentoReferenciaGuia"
+            name="referencia"
+            class="form-control"
+            placeholder="Resolución, Acta, etc."
+          />
+        </div>
+
+        <div class="col-md-12 mb-3">
+          <label class="fw-bold text-success mb-2"
+            >Equipos a Despachar (Seleccione las casillas)</label
+          >
+          <div
+            class="border rounded p-3"
+            style="height: 180px; overflow-y: auto; background-color: #f8f9fa"
+          >
+            <div class="form-check mb-2 pb-2 border-bottom" *ngFor="let eq of listaEquipos">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                [id]="'eq-' + eq.equipoId"
+                [checked]="isEquipoSeleccionado(eq)"
+                [disabled]="isEquipoDespachadoEnOtro(eq)"
+                (change)="toggleEquipo(eq, $event)"
+              />
+              <label
+                class="form-check-label d-flex justify-content-between align-items-center w-100"
+                [for]="'eq-' + eq.equipoId"
+                [ngClass]="{
+                  'text-muted text-decoration-line-through': isEquipoDespachadoEnOtro(eq),
+                }"
+              >
+                <span
+                  ><strong>Serie: {{ eq.numeroSerie }}</strong> | {{ eq.marca }} {{ eq.modelo }} ({{
+                    eq.tipoEquipo?.nombreTipo
+                  }})</span
+                >
+                <span class="badge bg-secondary ms-2" *ngIf="isEquipoDespachadoEnOtro(eq)"
+                  >Ya despachado</span
+                >
+                <span
+                  class="badge bg-success ms-2"
+                  *ngIf="isEquipoSeleccionado(eq) && !isEquipoDespachadoEnOtro(eq)"
+                  >Seleccionado</span
+                >
+              </label>
+            </div>
+            <div class="text-center text-muted mt-4" *ngIf="listaEquipos.length === 0">
+              No hay equipos registrados.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-success fw-bold">Guardar Despacho</button>
+      <button
+        type="button"
+        class="btn btn-secondary ms-2 fw-bold"
+        (click)="limpiar()"
+        *ngIf="despacho.donacionId"
+      >
+        Cancelar Edición
+      </button>
+
+      <div *ngIf="mensajeExito" class="alert alert-success mt-3 mb-0">
+        <i class="bi bi-check-circle-fill me-2"></i> ¡Despacho {{ mensajeAccion }} exitosamente!
+      </div>
+    </form>
+  </div>
+
+  <table class="table table-bordered table-hover shadow-sm bg-white">
+    <thead class="table-dark">
+      <tr>
+        <th>N° Guía</th>
+        <th>Colegio Destino</th>
+        <th>Fecha Envío</th>
+        <th>Responsable</th>
+        <th>Total Equipos</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let d of listaDespachos">
+        <td class="fw-bold text-success">{{ d.numeroGuiaRemision }}</td>
+        <td>{{ d.institucion?.nombreColegio }}</td>
+        <td>{{ d.fechaEnvio | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ d.usuarioResponsable?.nombre }}</td>
+        <td>
+          <button (click)="abrirModal(d)" class="btn btn-outline-info btn-sm rounded-pill fw-bold">
+            Ver {{ d.equipos?.length || 0 }} equipos
+          </button>
+        </td>
+        <td>
+          <button (click)="generarPDF(d)" class="btn btn-danger btn-sm me-2" title="Imprimir Guía">
+            PDF
+          </button>
+
+          <button (click)="editar(d)" class="btn btn-warning btn-sm me-2">Editar</button>
+          <button (click)="eliminar(d.donacionId)" class="btn btn-outline-danger btn-sm">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="listaDespachos.length === 0">
+        <td colspan="6" class="text-center py-4 text-muted">Aún no hay despachos emitidos.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div
+  class="modal"
+  tabindex="-1"
+  [ngStyle]="{ display: despachoModal ? 'block' : 'none', 'background-color': 'rgba(0,0,0,0.6)' }"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0 rounded-4" *ngIf="despachoModal">
+      <div class="modal-header bg-success text-white rounded-top-4">
+        <h5 class="modal-title fw-bold">Detalle de Equipos</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cerrarModal()"></button>
+      </div>
+
+      <div class="modal-body p-4">
+        <div class="alert alert-light border mb-3">
+          <strong>Guía:</strong> {{ despachoModal.numeroGuiaRemision }} <br />
+          <strong>Destino:</strong> {{ despachoModal.institucion?.nombreColegio }}
+        </div>
+
+        <table class="table table-sm table-striped border">
+          <thead class="table-light">
+            <tr>
+              <th>#</th>
+              <th>N° Serie</th>
+              <th>Marca / Modelo</th>
+              <th>Tipo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let eq of despachoModal.equipos; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td class="fw-bold">{{ eq.numeroSerie }}</td>
+              <td>{{ eq.marca }} {{ eq.modelo }}</td>
+              <td>{{ eq.tipoEquipo?.nombreTipo || 'N/A' }}</td>
+            </tr>
+            <tr *ngIf="despachoModal.equipos?.length === 0">
+              <td colspan="4" class="text-center text-muted">
+                No hay equipos asignados a esta guía.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-secondary fw-bold" (click)="cerrarModal()">
+          Cerrar Ventana
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

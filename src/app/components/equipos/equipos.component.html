@@ -1,0 +1,119 @@
+<div class="container mt-4">
+  <div class="card p-4 shadow-sm mb-4 border-primary">
+    <h3 class="text-primary mb-3">Gestión de Equipos e Inventario</h3>
+    <form (ngSubmit)="registrar()">
+      <div class="row">
+        <div class="col-md-3 mb-3">
+          <label class="fw-bold text-muted">N° Serie</label
+          ><input
+            [(ngModel)]="nuevoEquipo.numeroSerie"
+            name="numeroSerie"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="col-md-3 mb-3">
+          <label class="fw-bold text-muted">Marca</label
+          ><input [(ngModel)]="nuevoEquipo.marca" name="marca" class="form-control" required />
+        </div>
+        <div class="col-md-3 mb-3">
+          <label class="fw-bold text-muted">Modelo</label
+          ><input [(ngModel)]="nuevoEquipo.modelo" name="modelo" class="form-control" required />
+        </div>
+        <div class="col-md-3 mb-3">
+          <label class="fw-bold text-muted">Fecha</label
+          ><input
+            type="date"
+            [(ngModel)]="nuevoEquipo.fechaRecepcion"
+            name="fechaRecepcion"
+            class="form-control"
+            required
+          />
+        </div>
+
+        <div class="col-md-3 mb-3">
+          <label class="fw-bold text-muted">Tipo</label>
+          <select
+            [(ngModel)]="nuevoEquipo.tipoEquipo.tipoId"
+            name="tipoId"
+            class="form-select"
+            required
+          >
+            <option [ngValue]="null">-- Seleccione --</option>
+            <option *ngFor="let t of listaTipos" [value]="t.tipoId">{{ t.nombreTipo }}</option>
+          </select>
+        </div>
+        <div class="col-md-3 mb-3">
+          <label class="fw-bold text-muted">Estado</label>
+          <select
+            [(ngModel)]="nuevoEquipo.estadoActual.estadoId"
+            name="estadoId"
+            class="form-select"
+            required
+          >
+            <option [ngValue]="null">-- Seleccione --</option>
+            <option *ngFor="let e of listaEstados" [value]="e.estadoId">
+              {{ e.nombreEstado }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-3 mb-3">
+          <label class="fw-bold text-muted">Donante</label>
+          <select
+            [(ngModel)]="nuevoEquipo.donante.donanteId"
+            name="donanteId"
+            class="form-select"
+            required
+          >
+            <option [ngValue]="null">-- Seleccione --</option>
+            <option *ngFor="let d of listaDonantes" [value]="d.donanteId">
+              {{ d.razonSocial }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-3 mb-3">
+          <label class="fw-bold text-muted">Técnico Responsable</label>
+          <select
+            [(ngModel)]="nuevoEquipo.usuarioResponsable.usuarioId"
+            name="usuarioId"
+            class="form-select"
+            required
+          >
+            <option [ngValue]="null">-- Seleccione Técnico --</option>
+            <option *ngFor="let u of listaUsuarios" [value]="u.usuarioId">{{ u.nombre }}</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">
+        {{ nuevoEquipo.equipoId ? 'Actualizar' : 'Guardar' }}
+      </button>
+    </form>
+  </div>
+
+  <table class="table table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>Serie</th>
+        <th>Modelo</th>
+        <th>Tipo</th>
+        <th>Estado</th>
+        <th>Técnico</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let e of listaEquipos">
+        <td>{{ e.numeroSerie }}</td>
+        <td>{{ e.modelo }}</td>
+        <td>{{ e.tipoEquipo?.nombreTipo }}</td>
+        <td>{{ e.estadoActual?.nombreEstado }}</td>
+        <td>{{ e.usuarioResponsable?.nombre || 'Sin asignar' }}</td>
+        <td>
+          <button (click)="cargarParaEditar(e)" class="btn btn-warning btn-sm me-2">Editar</button>
+          <button (click)="eliminar(e.equipoId)" class="btn btn-danger btn-sm">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

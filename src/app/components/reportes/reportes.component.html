@@ -1,0 +1,379 @@
+<div class="container mt-4">
+  <div class="row mb-3">
+    <div class="col-12">
+      <h2 class="text-primary fw-bold border-bottom pb-2">
+        <i class="bi bi-bar-chart-line me-2"></i> Módulo de Reportes Gerenciales
+      </h2>
+      <p class="text-muted">Seleccione el módulo que desea auditar y exportar.</p>
+    </div>
+  </div>
+
+  <ul class="nav nav-tabs mb-4 fw-bold">
+    <li class="nav-item me-1">
+      <a
+        class="nav-link"
+        [ngClass]="{
+          'bg-primary text-white border-primary active': tipoReporte === 'equipos',
+          'text-muted bg-light': tipoReporte !== 'equipos',
+        }"
+        (click)="cambiarPestana('equipos')"
+        style="cursor: pointer; transition: 0.2s"
+      >
+        <i class="bi bi-pc-display me-1"></i> Inventario de Equipos
+      </a>
+    </li>
+    <li class="nav-item me-1">
+      <a
+        class="nav-link"
+        [ngClass]="{
+          'bg-primary text-white border-primary active': tipoReporte === 'despachos',
+          'text-muted bg-light': tipoReporte !== 'despachos',
+        }"
+        (click)="cambiarPestana('despachos')"
+        style="cursor: pointer; transition: 0.2s"
+      >
+        <i class="bi bi-truck me-1"></i> Historial de Despachos
+      </a>
+    </li>
+    <li class="nav-item me-1">
+      <a
+        class="nav-link"
+        [ngClass]="{
+          'bg-primary text-white border-primary active': tipoReporte === 'historial',
+          'text-muted bg-light': tipoReporte !== 'historial',
+        }"
+        (click)="cambiarPestana('historial')"
+        style="cursor: pointer; transition: 0.2s"
+      >
+        <i class="bi bi-clock-history me-1"></i> Trazabilidad Técnica
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        [ngClass]="{
+          'bg-primary text-white border-primary active': tipoReporte === 'instituciones',
+          'text-muted bg-light': tipoReporte !== 'instituciones',
+        }"
+        (click)="cambiarPestana('instituciones')"
+        style="cursor: pointer; transition: 0.2s"
+      >
+        <i class="bi bi-building me-1"></i> Directorio Instituciones
+      </a>
+    </li>
+  </ul>
+
+  <div class="card p-4 shadow-sm mb-4 bg-light border-0">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold text-secondary mb-0">
+        <i class="bi bi-funnel"></i> Criterios de Búsqueda
+      </h5>
+      <button (click)="limpiarFiltros()" class="btn btn-outline-secondary btn-sm fw-bold">
+        <i class="bi bi-eraser"></i> Limpiar Filtros
+      </button>
+    </div>
+
+    <div class="row align-items-end">
+      <ng-container *ngIf="tipoReporte === 'equipos'">
+        <div class="col-md-4 mb-3">
+          <label class="fw-bold small text-muted">Estado del Equipo</label>
+          <select
+            [(ngModel)]="filtrosEquipos.estadoId"
+            (change)="aplicarFiltrosEquipos()"
+            class="form-select"
+          >
+            <option [ngValue]="null">Todos los estados</option>
+            <option *ngFor="let est of listaEstados" [value]="est.estadoId">
+              {{ est.nombreEstado }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="fw-bold small text-muted">Tipo de Equipo</label>
+          <select
+            [(ngModel)]="filtrosEquipos.tipoId"
+            (change)="aplicarFiltrosEquipos()"
+            class="form-select"
+          >
+            <option [ngValue]="null">Todos los tipos</option>
+            <option *ngFor="let tipo of listaTipos" [value]="tipo.tipoId">
+              {{ tipo.nombreTipo }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="fw-bold small text-muted">Donante de Origen</label>
+          <select
+            [(ngModel)]="filtrosEquipos.donanteId"
+            (change)="aplicarFiltrosEquipos()"
+            class="form-select"
+          >
+            <option [ngValue]="null">Todos los donantes</option>
+            <option *ngFor="let don of listaDonantes" [value]="don.donanteId">
+              {{ don.razonSocial }}
+            </option>
+          </select>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="tipoReporte === 'despachos'">
+        <div class="col-md-6 mb-3">
+          <label class="fw-bold small text-muted">Filtrar por Colegio Destino</label>
+          <select
+            [(ngModel)]="filtroDespachos.institucionId"
+            (change)="aplicarFiltrosDespachos()"
+            class="form-select"
+          >
+            <option [ngValue]="null">Mostrar todas las instituciones</option>
+            <option *ngFor="let inst of instituciones" [value]="inst.institucionId">
+              {{ inst.nombreColegio }}
+            </option>
+          </select>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="tipoReporte === 'historial'">
+        <div class="col-md-6 mb-3">
+          <label class="fw-bold small text-muted">Filtrar por Técnico Responsable</label>
+          <select
+            [(ngModel)]="filtrosHistorial.usuarioId"
+            (change)="aplicarFiltrosHistorial()"
+            class="form-select"
+          >
+            <option [ngValue]="null">Todos los técnicos</option>
+            <option *ngFor="let u of listaUsuarios" [value]="u.usuarioId">{{ u.nombre }}</option>
+          </select>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="fw-bold small text-muted">Filtrar por Equipo (N° Serie)</label>
+          <select
+            [(ngModel)]="filtrosHistorial.equipoId"
+            (change)="aplicarFiltrosHistorial()"
+            class="form-select"
+          >
+            <option [ngValue]="null">Todos los equipos</option>
+            <option *ngFor="let eq of equipos" [value]="eq.equipoId">
+              {{ eq.numeroSerie }} - {{ eq.marca }} {{ eq.modelo }}
+            </option>
+          </select>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="tipoReporte === 'instituciones'">
+        <div class="col-12 mb-3 text-muted">
+          <em>Mostrando el directorio completo de colegios registrados en el sistema.</em>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <span class="badge bg-primary fs-6 py-2 px-3 shadow-sm">
+      <i class="bi bi-card-list me-1"></i> Resultados:
+      {{
+        tipoReporte === 'equipos'
+          ? equiposFiltrados.length
+          : tipoReporte === 'despachos'
+            ? despachosFiltrados.length
+            : tipoReporte === 'historial'
+              ? historialFiltrado.length
+              : institucionesFiltradas.length
+      }}
+      registros
+    </span>
+    <div>
+      <button (click)="exportarExcel()" class="btn btn-success me-2 fw-bold shadow-sm">
+        <i class="bi bi-file-earmark-excel-fill"></i> Descargar Excel
+      </button>
+      <button (click)="exportarPDF()" class="btn btn-danger fw-bold shadow-sm">
+        <i class="bi bi-file-earmark-pdf-fill"></i> Descargar PDF
+      </button>
+    </div>
+  </div>
+
+  <table
+    class="table table-bordered table-hover shadow-sm bg-white"
+    *ngIf="tipoReporte === 'equipos'"
+  >
+    <thead class="table-dark">
+      <tr>
+        <th>N° Serie</th>
+        <th>Marca/Modelo</th>
+        <th>Tipo</th>
+        <th>Estado</th>
+        <th>Donante</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let eq of equiposFiltrados">
+        <td class="fw-bold">{{ eq.numeroSerie || 'S/N' }}</td>
+        <td>{{ eq.marca }} {{ eq.modelo }}</td>
+        <td>{{ eq.tipoEquipo?.nombreTipo || 'N/A' }}</td>
+        <td>{{ eq.estadoActual?.nombreEstado || 'N/A' }}</td>
+        <td>{{ eq.donante?.razonSocial || 'N/A' }}</td>
+      </tr>
+      <tr *ngIf="equiposFiltrados.length === 0">
+        <td colspan="5" class="text-center py-3 text-muted">No hay resultados.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table
+    class="table table-bordered table-hover shadow-sm bg-white"
+    *ngIf="tipoReporte === 'despachos'"
+  >
+    <thead class="table-dark">
+      <tr>
+        <th>Guía</th>
+        <th>Colegio Destino</th>
+        <th>Fecha</th>
+        <th>Equipos Entregados</th>
+        <th>Responsable</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let d of despachosFiltrados">
+        <td class="fw-bold text-primary">{{ d.numeroGuiaRemision || 'S/N' }}</td>
+        <td>{{ d.institucion?.nombreColegio || 'N/A' }}</td>
+        <td>{{ d.fechaEnvio | date: 'dd/MM/yyyy' }}</td>
+        <td>
+          <button
+            (click)="abrirModalEquipos(d)"
+            class="btn btn-outline-info btn-sm rounded-pill fw-bold"
+          >
+            Ver {{ d.equipos?.length || 0 }} equipos
+          </button>
+        </td>
+        <td>{{ d.usuarioResponsable?.nombre || 'N/A' }}</td>
+      </tr>
+      <tr *ngIf="despachosFiltrados.length === 0">
+        <td colspan="5" class="text-center py-3 text-muted">No hay resultados.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table
+    class="table table-bordered table-hover shadow-sm bg-white"
+    *ngIf="tipoReporte === 'historial'"
+  >
+    <thead class="table-dark">
+      <tr>
+        <th>N° Serie</th>
+        <th>Técnico Responsable</th>
+        <th>Estado Anterior</th>
+        <th>Estado Nuevo</th>
+        <th>Fecha de Cambio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let h of historialFiltrado">
+        <td class="fw-bold text-primary">{{ h.equipo?.numeroSerie || 'S/N' }}</td>
+        <td>
+          <i class="bi bi-person-fill text-muted me-1"></i>
+          {{ h.usuarioResponsable?.nombre || 'N/A' }}
+        </td>
+        <td>
+          <span class="badge bg-warning text-dark">{{
+            h.estadoAnterior?.nombreEstado || 'Ingreso'
+          }}</span>
+        </td>
+        <td>
+          <span class="badge bg-success">{{ h.estadoNuevo?.nombreEstado || 'N/A' }}</span>
+        </td>
+        <td>{{ h.fechaCambio | date: 'dd/MM/yyyy HH:mm' }}</td>
+      </tr>
+      <tr *ngIf="historialFiltrado.length === 0">
+        <td colspan="5" class="text-center py-4 text-muted">
+          No hay registros de trazabilidad para esta búsqueda.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table
+    class="table table-bordered table-hover shadow-sm bg-white"
+    *ngIf="tipoReporte === 'instituciones'"
+  >
+    <thead class="table-dark">
+      <tr>
+        <th>Colegio</th>
+        <th>Director / Contacto</th>
+        <th>Teléfono</th>
+        <th>UGEL</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let inst of institucionesFiltradas">
+        <td class="fw-bold">{{ inst.nombreColegio }}</td>
+        <td>{{ inst.director || 'N/A' }}</td>
+        <td>{{ inst.telefonoContacto || 'N/A' }}</td>
+        <td>{{ inst.ugel || 'N/A' }}</td>
+      </tr>
+      <tr *ngIf="institucionesFiltradas.length === 0">
+        <td colspan="4" class="text-center py-3 text-muted">No hay resultados.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div
+  class="modal"
+  tabindex="-1"
+  [ngStyle]="{
+    display: despachoSeleccionadoModal ? 'block' : 'none',
+    'background-color': 'rgba(0,0,0,0.6)',
+  }"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0 rounded-4" *ngIf="despachoSeleccionadoModal">
+      <div class="modal-header bg-primary text-white rounded-top-4">
+        <h5 class="modal-title fw-bold">
+          <i class="bi bi-pc-display-horizontal me-2"></i> Detalle de Equipos Despachados
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          (click)="cerrarModalEquipos()"
+        ></button>
+      </div>
+
+      <div class="modal-body p-4">
+        <div class="alert alert-light border mb-3">
+          <strong>Guía de Remisión:</strong> {{ despachoSeleccionadoModal.numeroGuiaRemision }}
+          <br />
+          <strong>Destino:</strong> {{ despachoSeleccionadoModal.institucion?.nombreColegio }}
+        </div>
+
+        <table class="table table-sm table-striped border">
+          <thead class="table-light">
+            <tr>
+              <th>#</th>
+              <th>N° Serie</th>
+              <th>Marca / Modelo</th>
+              <th>Tipo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let eq of despachoSeleccionadoModal.equipos; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td class="fw-bold text-dark">{{ eq.numeroSerie }}</td>
+              <td>{{ eq.marca }} {{ eq.modelo }}</td>
+              <td>{{ eq.tipoEquipo?.nombreTipo || 'N/A' }}</td>
+            </tr>
+            <tr *ngIf="despachoSeleccionadoModal.equipos?.length === 0">
+              <td colspan="4" class="text-center text-muted">
+                No hay equipos asignados a esta guía de despacho.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-secondary fw-bold" (click)="cerrarModalEquipos()">
+          Cerrar Ventana
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

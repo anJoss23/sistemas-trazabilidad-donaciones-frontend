@@ -1,0 +1,58 @@
+<div class="container mt-4">
+  <div class="card p-4 shadow-sm mb-4">
+    <h3>Gestión de Donantes</h3>
+    <form (ngSubmit)="guardar()">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label>Razón Social</label
+          ><input [(ngModel)]="donante.razonSocial" name="rs" class="form-control" required />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label>RUC/DNI</label
+          ><input [(ngModel)]="donante.rucDni" name="ruc" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label>Contacto</label
+          ><input [(ngModel)]="donante.contactoNombre" name="con" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label>Correo</label
+          ><input [(ngModel)]="donante.correo" name="cor" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label>Teléfono</label
+          ><input [(ngModel)]="donante.telefono" name="tel" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label>Dirección</label
+          ><input [(ngModel)]="donante.direccion" name="dir" class="form-control" />
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Guardar</button>
+
+      <div *ngIf="mensajeExito" class="alert alert-success mt-3">
+        ¡Operación realizada exitosamente!
+      </div>
+    </form>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Razón Social</th>
+        <th>RUC</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let d of lista">
+        <td>{{ d.razonSocial }}</td>
+        <td>{{ d.rucDni }}</td>
+        <td>
+          <button (click)="editar(d)" class="btn btn-warning btn-sm">Editar</button>
+          <button (click)="eliminar(d.donanteId)" class="btn btn-danger btn-sm">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

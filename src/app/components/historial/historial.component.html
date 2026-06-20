@@ -1,0 +1,106 @@
+<div class="container mt-4">
+  <div class="card p-4 shadow-sm mb-4 border-info">
+    <h3 class="text-info mb-3">Registro de Trazabilidad Técnica</h3>
+    <form (ngSubmit)="guardar()">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="fw-bold text-muted">Equipo (N° Serie)</label>
+          <select
+            [(ngModel)]="registro.equipo.equipoId"
+            name="equipoId"
+            class="form-select"
+            required
+            (change)="onEquipoSeleccionado()"
+          >
+            <option [ngValue]="null">-- Seleccione el Equipo --</option>
+            <option *ngFor="let e of listaEquipos" [value]="e.equipoId">
+              {{ e.numeroSerie }} - {{ e.marca }} {{ e.modelo }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="fw-bold text-muted">Técnico Responsable</label>
+          <select
+            [(ngModel)]="registro.usuarioResponsable.usuarioId"
+            name="usuarioId"
+            class="form-select"
+            required
+          >
+            <option [ngValue]="null">-- Seleccione el Técnico --</option>
+            <option *ngFor="let u of listaUsuarios" [value]="u.usuarioId">{{ u.nombre }}</option>
+          </select>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="fw-bold text-muted">Estado Anterior (Automático)</label>
+          <select
+            [(ngModel)]="registro.estadoAnterior.estadoId"
+            name="estadoAntId"
+            class="form-select bg-light"
+            disabled
+          >
+            <option [ngValue]="null">-- Seleccione equipo primero --</option>
+            <option *ngFor="let est of listaEstados" [value]="est.estadoId">
+              {{ est.nombreEstado }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="fw-bold text-muted">Estado Nuevo</label>
+          <select
+            [(ngModel)]="registro.estadoNuevo.estadoId"
+            name="estadoNuevoId"
+            class="form-select"
+            required
+          >
+            <option [ngValue]="null">-- Seleccione el Nuevo Estado --</option>
+            <option *ngFor="let est of listaEstados" [value]="est.estadoId">
+              {{ est.nombreEstado }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-12 mb-3">
+          <label class="fw-bold text-muted">Observaciones</label>
+          <textarea
+            [(ngModel)]="registro.observaciones"
+            name="observaciones"
+            class="form-control"
+            rows="2"
+          ></textarea>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-info text-white fw-bold">Guardar Historial</button>
+    </form>
+  </div>
+
+  <table class="table table-bordered table-hover shadow-sm bg-white">
+    <thead class="table-dark">
+      <tr>
+        <th>N° Serie</th>
+        <th>Técnico</th>
+        <th>Estado Anterior</th>
+        <th>Estado Nuevo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let h of listaHistorial">
+        <td>{{ h.equipo?.numeroSerie }}</td>
+        <td>{{ h.usuarioResponsable?.nombre }}</td>
+        <td>
+          <span class="badge bg-secondary">{{ h.estadoAnterior?.nombreEstado || 'N/A' }}</span>
+        </td>
+        <td>
+          <span class="badge bg-primary">{{ h.estadoNuevo?.nombreEstado || 'N/A' }}</span>
+        </td>
+        <td>
+          <button (click)="editar(h)" class="btn btn-warning btn-sm me-2">Editar</button>
+          <button (click)="eliminar(h.historialId)" class="btn btn-danger btn-sm">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

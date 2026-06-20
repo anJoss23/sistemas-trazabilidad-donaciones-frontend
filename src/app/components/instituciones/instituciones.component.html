@@ -1,0 +1,51 @@
+<div class="container mt-4">
+  <div class="card p-4 shadow-sm mb-4">
+    <h3>Gestión de Instituciones Beneficiarias</h3>
+    <form (ngSubmit)="guardar()">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label>Colegio</label
+          ><input [(ngModel)]="inst.nombreColegio" name="nom" class="form-control" required />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label>Director</label
+          ><input [(ngModel)]="inst.director" name="dir" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label>Dirección</label
+          ><input [(ngModel)]="inst.direccion" name="direc" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label>UGEL</label><input [(ngModel)]="inst.ugel" name="ugel" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label>Teléfono</label
+          ><input [(ngModel)]="inst.telefonoContacto" name="tel" class="form-control" />
+        </div>
+      </div>
+      <button type="submit" class="btn btn-success">Guardar</button>
+      <div *ngIf="mensajeExito" class="alert alert-success mt-3">¡Operación exitosa!</div>
+    </form>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Colegio</th>
+        <th>Director</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of lista">
+        <td>{{ i.nombreColegio }}</td>
+        <td>{{ i.director }}</td>
+        <td>
+          <button (click)="editar(i)" class="btn btn-warning btn-sm">Editar</button>
+          <button (click)="eliminar(i.institucionId)" class="btn btn-danger btn-sm">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
