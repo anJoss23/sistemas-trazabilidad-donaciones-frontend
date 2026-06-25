@@ -28,7 +28,7 @@ export class EquiposComponent implements OnInit {
   listaEstados: any[] = [];
   listaDonantes: any[] = [];
   listaUsuarios: any[] = []; // AGREGADO
-
+ //agregado variables para mensaje
   mensajeExito = false;
   mensajeError = false;
   mensajeAccion: string = '';

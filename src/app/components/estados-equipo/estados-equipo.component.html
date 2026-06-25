@@ -9,11 +9,13 @@
       required
     />
     <button type="submit" class="btn btn-primary">Guardar</button>
+    <div *ngIf="mensajeExito" class="alert alert-success mt-3" role="alert">
+      ¡Estado {{ mensajeAccion }} exitosamente!
+    </div>
+    <div *ngIf="mensajeError" class="alert alert-danger mt-3" role="alert">
+      Ocurrió un error al intentar guardar el registro. Verifica los datos ingresados.
+    </div>
   </form>
-
-  <div *ngIf="mensajeExito" class="alert alert-success">
-    ¡Estado {{ mensajeAccion }} exitosamente!
-  </div>
 
   <table class="table">
     <thead>

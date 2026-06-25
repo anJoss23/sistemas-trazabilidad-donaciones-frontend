@@ -12,8 +12,16 @@ import { EstadoEquipoService } from '../../services/estado-equipo.service';
 export class EstadosEquipoComponent implements OnInit {
   estado: any = { estadoId: null, nombreEstado: '' };
   lista: any[] = [];
-  mensajeExito: boolean = false;
-  mensajeAccion: string = 'guardado';
+
+  //esto esta
+  //mensajeExito: boolean = false;
+//  mensajeAccion: string = 'guardado';
+//esto es nuevo
+  mensajeExito = false;
+  mensajeError = false;
+  mensajeAccion: string = '';
+
+
 
   constructor(private service: EstadoEquipoService, private cdr: ChangeDetectorRef) {}
 
@@ -34,6 +42,7 @@ export class EstadosEquipoComponent implements OnInit {
       this.mensajeExito = true;
       this.cdr.detectChanges(); // Forzamos actualización visual
       setTimeout(() => this.mensajeExito = false, 3000);
+
     });
   }
 

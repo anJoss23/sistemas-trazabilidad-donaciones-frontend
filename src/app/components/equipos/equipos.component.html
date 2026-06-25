@@ -4,8 +4,8 @@
     <form (ngSubmit)="registrar()">
       <div class="row">
         <div class="col-md-3 mb-3">
-          <label class="fw-bold text-muted">N° Serie</label
-          ><input
+          <label class="fw-bold text-muted">N° Serie</label>
+          <input
             [(ngModel)]="nuevoEquipo.numeroSerie"
             name="numeroSerie"
             class="form-control"
@@ -13,16 +13,16 @@
           />
         </div>
         <div class="col-md-3 mb-3">
-          <label class="fw-bold text-muted">Marca</label
-          ><input [(ngModel)]="nuevoEquipo.marca" name="marca" class="form-control" required />
+          <label class="fw-bold text-muted">Marca</label>
+          <input [(ngModel)]="nuevoEquipo.marca" name="marca" class="form-control" required />
         </div>
         <div class="col-md-3 mb-3">
-          <label class="fw-bold text-muted">Modelo</label
-          ><input [(ngModel)]="nuevoEquipo.modelo" name="modelo" class="form-control" required />
+          <label class="fw-bold text-muted">Modelo</label>
+          <input [(ngModel)]="nuevoEquipo.modelo" name="modelo" class="form-control" required />
         </div>
         <div class="col-md-3 mb-3">
-          <label class="fw-bold text-muted">Fecha</label
-          ><input
+          <label class="fw-bold text-muted">Fecha</label>
+          <input
             type="date"
             [(ngModel)]="nuevoEquipo.fechaRecepcion"
             name="fechaRecepcion"
@@ -85,9 +85,23 @@
           </select>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">
-        {{ nuevoEquipo.equipoId ? 'Actualizar' : 'Guardar' }}
-      </button>
+
+      <div>
+        <button type="submit" class="btn btn-primary">
+          {{ nuevoEquipo.equipoId ? 'Actualizar' : 'Guardar' }}
+        </button>
+        <button type="button" class="btn btn-secondary ms-2" (click)="limpiarFormulario()">
+          Limpiar
+        </button>
+      </div>
+
+      <div *ngIf="mensajeExito" class="alert alert-success mt-3" role="alert">
+        {{ mensajeAccion }}
+      </div>
+
+      <div *ngIf="mensajeError" class="alert alert-danger mt-3" role="alert">
+        Ocurrió un error al intentar guardar el equipo.
+      </div>
     </form>
   </div>
 
