@@ -10,25 +10,25 @@ import { HistorialComponent } from './components/historial/historial.component';
 import { TipoEquipoComponent } from './components/tipo-equipo/tipo-equipo.component';
 import { EstadosEquipoComponent } from './components/estados-equipo/estados-equipo.component';
 import { RolesComponent } from './components/roles/roles.component';
-// Importamos el nuevo componente de reportes
 import { ReportesComponent } from './components/reportes/reportes.component';
+import { AuthGuard } from './auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'equipos', component: EquiposComponent },
-  { path: 'usuarios', component: UsuariosComponent },
-  { path: 'donantes', component: DonantesComponent },
-  { path: 'instituciones', component: InstitucionesComponent },
-  { path: 'despachos', component: DespachosComponent },
-  { path: 'historial', component: HistorialComponent },
-  { path: 'tipo-equipo', component: TipoEquipoComponent },
-  { path: 'estados-equipo', component: EstadosEquipoComponent },
-  { path: 'roles', component: RolesComponent },
+  { path: 'login', component: LoginComponent }, // El login es público
 
-  // NUEVA RUTA PARA REPORTES
-  { path: 'reportes', component: ReportesComponent },
+  // TODAS ESTAS RUTAS ESTÁN PROTEGIDAS POR EL GUARD
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'equipos', component: EquiposComponent, canActivate: [AuthGuard] },
+  { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },
+  { path: 'donantes', component: DonantesComponent, canActivate: [AuthGuard] },
+  { path: 'instituciones', component: InstitucionesComponent, canActivate: [AuthGuard] },
+  { path: 'despachos', component: DespachosComponent, canActivate: [AuthGuard] },
+  { path: 'historial', component: HistorialComponent, canActivate: [AuthGuard] },
+  { path: 'tipo-equipo', component: TipoEquipoComponent, canActivate: [AuthGuard] },
+  { path: 'estados-equipo', component: EstadosEquipoComponent, canActivate: [AuthGuard] },
+  { path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },
+  { path: 'reportes', component: ReportesComponent, canActivate: [AuthGuard] },
 
   // Ruta de respaldo (siempre debe ir al final)
   { path: '**', redirectTo: 'login' }
