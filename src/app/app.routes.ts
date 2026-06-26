@@ -12,6 +12,8 @@ import { EstadosEquipoComponent } from './components/estados-equipo/estados-equi
 import { RolesComponent } from './components/roles/roles.component';
 import { ReportesComponent } from './components/reportes/reportes.component';
 import { AuthGuard } from './auth.guard';
+//  Importamos el Guardián
+import { RoleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -24,7 +26,16 @@ export const routes: Routes = [
   { path: 'donantes', component: DonantesComponent, canActivate: [AuthGuard] },
   { path: 'instituciones', component: InstitucionesComponent, canActivate: [AuthGuard] },
   { path: 'despachos', component: DespachosComponent, canActivate: [AuthGuard] },
-  { path: 'historial', component: HistorialComponent, canActivate: [AuthGuard] },
+  //{ path: 'historial', component: HistorialComponent, canActivate: [AuthGuard] },
+
+  // MODIFICADO: Agregamos el Guard y la "Lista Negra" (rolesDenegados)
+  {
+    path: 'historial',
+    component: HistorialComponent,
+    canActivate: [RoleGuard],
+    data: { rolesDenegados: ['ADMINISTRADOR'] }
+  },
+
   { path: 'tipo-equipo', component: TipoEquipoComponent, canActivate: [AuthGuard] },
   { path: 'estados-equipo', component: EstadosEquipoComponent, canActivate: [AuthGuard] },
   { path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },

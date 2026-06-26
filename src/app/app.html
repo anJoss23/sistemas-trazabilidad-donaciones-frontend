@@ -27,7 +27,7 @@
           >Despachos</a
         >
       </li>
-      <li>
+      <li *ngIf="rolUsuario !== 'ADMINISTRADOR'">
         <a routerLink="/historial" class="nav-link text-white" routerLinkActive="active"
           >Historial</a
         >

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
-// 1. NUEVO: Importamos el AuthService
+// 1. Importamos el AuthService
 import { AuthService } from './services/auth.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { AuthService } from './services/auth.service';
 export class App {
   showMenu: boolean = false;
 
-  // 2. NUEVO: Inyectamos private authService: AuthService en el constructor
+  // 2.  Inyectamos private authService: AuthService en el constructor
   constructor(private router: Router, private authService: AuthService) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -23,10 +23,17 @@ export class App {
     });
   }
 
-  // 3. NUEVO: Creamos el "Getter" para leer los datos del token en la vista
+  // 3. Creamos el "Getter" para leer los datos del token en la vista
   get usuarioActual() {
     return this.authService.obtenerDatosUsuario();
   }
+  // 4. Atajo para obtener el nombre del rol en mayúsculas (evita errores de texto)
+  get rolUsuario() {
+    const user = this.usuarioActual;
+    const rol = user ? (user.role || user.rol || user.authorities || '') : '';
+    return rol.toUpperCase();
+  }
+
 
   logout() {
     localStorage.removeItem('token');
