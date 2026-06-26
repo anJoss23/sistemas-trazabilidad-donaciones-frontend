@@ -15,9 +15,12 @@
         <div class="col-md-3 mb-3 d-flex align-items-end">
           <button type="submit" class="btn btn-info w-100">Guardar</button>
         </div>
-      </div>
-      <div *ngIf="mensajeExito" class="alert alert-success mt-3">
-        ¡Tipo de equipo {{ mensajeAccion }} exitosamente!
+        <div *ngIf="mensajeExito" class="alert alert-success mt-3" role="alert">
+          {{ mensajeAccion }}
+        </div>
+        <div *ngIf="mensajeError" class="alert alert-danger mt-3" role="alert">
+          Ocurrió un error al guardar el tipo de equipo.
+        </div>
       </div>
     </form>
   </div>

@@ -12,7 +12,9 @@ import { InstitucionService } from '../../services/institucion.service';
 export class InstitucionesComponent implements OnInit {
   inst: any = { institucionId: null, nombreColegio: '', director: '', direccion: '', ugel: '', telefonoContacto: '' };
   lista: any[] = [];
-  mensajeExito: boolean = false;
+  mensajeExito = false;
+  mensajeError = false;
+  mensajeAccion: string = '';
 
   constructor(private service: InstitucionService, private cdr: ChangeDetectorRef) {}
 
@@ -26,12 +28,23 @@ export class InstitucionesComponent implements OnInit {
   }
 
   guardar() {
-    this.service.guardar(this.inst).subscribe(() => {
-      this.cargar();
-      this.limpiar();
-      this.mensajeExito = true;
-      setTimeout(() => this.mensajeExito = false, 3000);
-      this.cdr.detectChanges();
+    const esEdicion = !!this.inst.institucionId;
+
+    this.service.guardar(this.inst).subscribe({
+      next: () => {
+        this.mensajeAccion = esEdicion ? 'Institución actualizada correctamente' : 'Institución registrada correctamente';
+        this.cargar();
+        this.limpiar();
+        this.mensajeExito = true;
+        this.mensajeError = false;
+        setTimeout(() => this.mensajeExito = false, 3000);
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.mensajeError = true;
+        this.mensajeExito = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 

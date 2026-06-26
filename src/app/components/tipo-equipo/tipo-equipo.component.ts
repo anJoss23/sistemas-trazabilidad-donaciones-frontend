@@ -12,8 +12,9 @@ import { TipoEquipoService } from '../../services/tipo-equipo.service';
 export class TipoEquipoComponent implements OnInit {
   tipoEquipo: any = { tipoId: null, nombreTipo: '' };
   lista: any[] = [];
-  mensajeExito: boolean = false;
-  mensajeAccion: string = 'guardado';
+  mensajeExito = false;
+  mensajeError = false;
+  mensajeAccion: string = '';
 
   constructor(private service: TipoEquipoService, private cdr: ChangeDetectorRef) {}
 
@@ -29,13 +30,23 @@ export class TipoEquipoComponent implements OnInit {
   }
 
   guardar() {
-    this.mensajeAccion = this.tipoEquipo.tipoId ? 'actualizado' : 'guardado';
-    this.service.guardar(this.tipoEquipo).subscribe(() => {
-      this.cargar();
-      this.limpiar();
-      this.mensajeExito = true;
-      setTimeout(() => this.mensajeExito = false, 3000);
-      this.cdr.detectChanges();
+    const esEdicion = !!this.tipoEquipo.tipoId;
+
+    this.service.guardar(this.tipoEquipo).subscribe({
+      next: () => {
+        this.mensajeAccion = esEdicion ? 'Tipo de equipo actualizado' : 'Tipo de equipo registrado';
+        this.cargar();
+        this.limpiar();
+        this.mensajeExito = true;
+        this.mensajeError = false;
+        setTimeout(() => this.mensajeExito = false, 3000);
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.mensajeError = true;
+        this.mensajeExito = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 

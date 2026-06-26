@@ -30,8 +30,11 @@
       </div>
       <button type="submit" class="btn btn-primary">Guardar</button>
 
-      <div *ngIf="mensajeExito" class="alert alert-success mt-3">
-        ¡Operación realizada exitosamente!
+      <div *ngIf="mensajeExito" class="alert alert-success mt-3" role="alert">
+        {{ mensajeAccion }}
+      </div>
+      <div *ngIf="mensajeError" class="alert alert-danger mt-3" role="alert">
+        Ocurrió un error al guardar el donante. Verifica los datos.
       </div>
     </form>
   </div>

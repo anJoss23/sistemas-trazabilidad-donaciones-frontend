@@ -21,7 +21,9 @@ export class UsuariosComponent implements OnInit {
 
   lista: any[] = [];
   listaRoles: any[] = []; // NUEVA LISTA DINÁMICA
-
+  mensajeExito = false;
+  mensajeError = false;
+  mensajeAccion: string = '';
   constructor(
     private usuarioService: UsuarioService,
     private http: HttpClient, // Inyectamos HttpClient
@@ -49,10 +51,22 @@ export class UsuariosComponent implements OnInit {
   }
 
   guardar() {
-    this.usuarioService.guardar(this.usuario).subscribe(() => {
-      this.cargar();
-      this.limpiar();
-      this.cdr.detectChanges();
+    const esEdicion = !!this.usuario.usuarioId;
+    this.usuarioService.guardar(this.usuario).subscribe({
+      next: () => {
+        this.mensajeAccion = esEdicion ? 'Usuario actualizado correctamente' : 'Usuario registrado correctamente';
+        this.cargar();
+        this.limpiar();
+        this.mensajeExito = true;
+        this.mensajeError = false;
+        setTimeout(() => this.mensajeExito = false, 3000);
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.mensajeError = true;
+        this.mensajeExito = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 

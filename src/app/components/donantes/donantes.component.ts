@@ -12,7 +12,10 @@ import { DonanteService } from '../../services/donante.service';
 export class DonantesComponent implements OnInit {
   donante: any = { donanteId: null, razonSocial: '', rucDni: '', contactoNombre: '', correo: '', telefono: '', direccion: '' };
   lista: any[] = [];
-  mensajeExito: boolean = false; // Variable para controlar el mensaje
+   // Variable para controlar el mensaje
+  mensajeExito = false;
+  mensajeError = false;
+  mensajeAccion: string = '';
 
   constructor(private service: DonanteService, private cdr: ChangeDetectorRef) {}
 
@@ -26,12 +29,23 @@ export class DonantesComponent implements OnInit {
   }
 
   guardar() {
-    this.service.guardar(this.donante).subscribe(() => {
-      this.cargar();
-      this.limpiar();
-      this.mensajeExito = true; // Mostramos el mensaje
-      setTimeout(() => this.mensajeExito = false, 3000); // Lo ocultamos tras 3 segundos
-      this.cdr.detectChanges();
+    const esEdicion = !!this.donante.donanteId;
+
+    this.service.guardar(this.donante).subscribe({
+      next: () => {
+        this.mensajeAccion = esEdicion ? 'Donante actualizado correctamente' : 'Donante registrado correctamente';
+        this.cargar();
+        this.limpiar();
+        this.mensajeExito = true;
+        this.mensajeError = false;
+        setTimeout(() => this.mensajeExito = false, 3000);
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.mensajeError = true;
+        this.mensajeExito = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 

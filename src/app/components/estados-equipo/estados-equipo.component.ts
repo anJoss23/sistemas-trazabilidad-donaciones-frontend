@@ -35,14 +35,23 @@ export class EstadosEquipoComponent implements OnInit {
   }
 
   guardar() {
-    this.mensajeAccion = this.estado.estadoId ? 'actualizado' : 'guardado';
-    this.service.guardar(this.estado).subscribe(() => {
-      this.cargar();
-      this.limpiar();
-      this.mensajeExito = true;
-      this.cdr.detectChanges(); // Forzamos actualización visual
-      setTimeout(() => this.mensajeExito = false, 3000);
+   const esEdicion = !!this.estado.estadoId;
 
+    this.service.guardar(this.estado).subscribe({
+      next: () => {
+        this.mensajeAccion = esEdicion ? 'Estado actualizado correctamente' : 'Estado registrado correctamente';
+        this.cargar();
+        this.limpiar();
+        this.mensajeExito = true;
+        this.mensajeError = false;
+        setTimeout(() => this.mensajeExito = false, 3000);
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.mensajeError = true;
+        this.mensajeExito = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
