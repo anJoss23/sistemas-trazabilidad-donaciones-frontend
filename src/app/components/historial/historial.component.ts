@@ -25,8 +25,9 @@ export class HistorialComponent implements OnInit {
   listaUsuarios: any[] = [];
   listaEstados: any[] = [];
 
-  mensajeExito: boolean = false;
-  mensajeAccion: string = 'guardado';
+  mensajeExito = false;
+  mensajeError = false;
+  mensajeAccion: string = '';
 
   constructor(
     private service: HistorialService,
@@ -63,16 +64,24 @@ export class HistorialComponent implements OnInit {
   }
 
   guardar() {
-    this.mensajeAccion = this.registro.historialId ? 'actualizado' : 'guardado';
+    const esEdicion = !!this.registro.historialId;
+
     this.service.guardar(this.registro).subscribe({
       next: () => {
-        this.cargarDatos();
+        this.mensajeAccion = esEdicion ? 'Historial actualizado correctamente' : 'Historial registrado correctamente';
+        this.cargarDatos(); // Aquí usabas cargarDatos() en vez de cargar()
         this.limpiar();
         this.mensajeExito = true;
+        this.mensajeError = false;
         setTimeout(() => this.mensajeExito = false, 3000);
         this.cdr.detectChanges();
       },
-      error: (err) => console.error("Error al registrar:", err)
+      error: (err) => {
+        console.error("Error al registrar:", err);
+        this.mensajeError = true;
+        this.mensajeExito = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 

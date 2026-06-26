@@ -12,8 +12,9 @@ import { RolService } from '../../services/rol.service';
 export class RolesComponent implements OnInit {
   rol: any = { rolId: null, nombreRol: '' };
   lista: any[] = [];
-  mensajeExito: boolean = false;
-  mensajeAccion: string = 'guardado';
+  mensajeExito = false;
+  mensajeError = false;
+  mensajeAccion: string = '';
 
   constructor(private service: RolService, private cdr: ChangeDetectorRef) {}
 
@@ -27,13 +28,23 @@ export class RolesComponent implements OnInit {
   }
 
   guardar() {
-    this.mensajeAccion = this.rol.rolId ? 'actualizado' : 'guardado';
-    this.service.guardar(this.rol).subscribe(() => {
-      this.cargar();
-      this.limpiar();
-      this.mensajeExito = true;
-      this.cdr.detectChanges(); // Forzamos actualización visual
-      setTimeout(() => this.mensajeExito = false, 3000);
+    const esEdicion = !!this.rol.rolId;
+
+    this.service.guardar(this.rol).subscribe({
+      next: () => {
+        this.mensajeAccion = esEdicion ? 'Rol actualizado correctamente' : 'Rol registrado correctamente';
+        this.cargar();
+        this.limpiar();
+        this.mensajeExito = true;
+        this.mensajeError = false;
+        setTimeout(() => this.mensajeExito = false, 3000);
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.mensajeError = true;
+        this.mensajeExito = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
