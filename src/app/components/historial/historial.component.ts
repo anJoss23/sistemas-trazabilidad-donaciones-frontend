@@ -45,7 +45,17 @@ export class HistorialComponent implements OnInit {
       this.cdr.detectChanges();
     });
     this.http.get('http://localhost:8080/api/equipos').subscribe((data: any) => this.listaEquipos = data);
-    this.http.get('http://localhost:8080/api/usuarios').subscribe((data: any) => this.listaUsuarios = data);
+    //this.http.get('http://localhost:8080/api/usuarios').subscribe((data: any) => this.listaUsuarios = data);
+    // MODIFICADO: Filtramos la lista de usuarios para que solo guarde a los Técnicos
+    this.http.get<any[]>('http://localhost:8080/api/usuarios').subscribe((data: any[]) => {
+      this.listaUsuarios = data.filter(u => {
+        // Extraemos el nombre del rol, manejando posibles valores nulos
+        const nombreRol = (u.rol?.nombreRol || u.rol?.nombre || '').toUpperCase();
+        // Solo dejamos pasar a los que coincidan con TECNICO (con o sin tilde)
+        return nombreRol === 'TECNICO' || nombreRol === 'TÉCNICO';
+      });
+    });
+
     this.http.get('http://localhost:8080/api/estados-equipo').subscribe((data: any) => this.listaEstados = data);
   }
 
