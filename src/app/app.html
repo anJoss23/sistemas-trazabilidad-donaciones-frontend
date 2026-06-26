@@ -54,6 +54,22 @@
       </li>
     </ul>
     <hr />
+    <!--Agregado para mostrar el usuario-->
+    <div
+      *ngIf="usuarioActual as user"
+      class="px-3 pb-3 mb-3 border-bottom border-secondary text-center text-white"
+    >
+      <small class="text-white-50 d-block" style="font-size: 0.75rem">Conectado como:</small>
+
+      <span class="fw-bold d-block text-truncate" title="{{ user.sub }}">
+        {{ user.sub }}
+      </span>
+
+      <span class="badge bg-success mt-2">
+        {{ user.role || user.rol || user.authorities || 'Usuario' }}
+      </span>
+    </div>
+    <!--fin mostrar el usuario-->
     <button (click)="logout()" class="btn btn-danger w-100">Cerrar Sesión</button>
   </nav>
 
