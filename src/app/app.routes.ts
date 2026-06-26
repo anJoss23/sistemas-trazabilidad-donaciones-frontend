@@ -22,7 +22,14 @@ export const routes: Routes = [
   // TODAS ESTAS RUTAS ESTÁN PROTEGIDAS POR EL GUARD
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'equipos', component: EquiposComponent, canActivate: [AuthGuard] },
-  { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },
+  //{ path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },
+  // MODIFICADO: Protegido contra REGISTRADOR
+  {
+    path: 'usuarios',
+    component: UsuariosComponent,
+    canActivate: [RoleGuard],
+    data: { rolesDenegados: ['REGISTRADOR'] }
+  },
   { path: 'donantes', component: DonantesComponent, canActivate: [AuthGuard] },
   { path: 'instituciones', component: InstitucionesComponent, canActivate: [AuthGuard] },
   { path: 'despachos', component: DespachosComponent, canActivate: [AuthGuard] },
@@ -38,7 +45,14 @@ export const routes: Routes = [
 
   { path: 'tipo-equipo', component: TipoEquipoComponent, canActivate: [AuthGuard] },
   { path: 'estados-equipo', component: EstadosEquipoComponent, canActivate: [AuthGuard] },
-  { path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },
+  //{ path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },
+  // MODIFICADO: Protegido contra REGISTRADOR
+  {
+    path: 'roles',
+    component: RolesComponent,
+    canActivate: [RoleGuard],
+    data: { rolesDenegados: ['REGISTRADOR'] }
+  },
   { path: 'reportes', component: ReportesComponent, canActivate: [AuthGuard] },
 
   // Ruta de respaldo (siempre debe ir al final)

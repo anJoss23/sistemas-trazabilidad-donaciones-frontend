@@ -19,7 +19,7 @@
           >Instituciones</a
         >
       </li>
-      <li>
+      <li *ngIf="rolUsuario !== 'REGISTRADOR'">
         <a routerLink="/usuarios" class="nav-link text-white" routerLinkActive="active">Usuarios</a>
       </li>
       <li>
@@ -42,7 +42,7 @@
           >Estados de Equipo</a
         >
       </li>
-      <li>
+      <li *ngIf="rolUsuario !== 'REGISTRADOR'">
         <a routerLink="/roles" class="nav-link text-white" routerLinkActive="active"
           >Roles de Usuario</a
         >
