@@ -8,68 +8,78 @@
           >Dashboard</a
         >
       </li>
-      <li>
+
+      <li *ngIf="rolUsuario !== 'TECNICO' && rolUsuario !== 'TÉCNICO'">
         <a routerLink="/equipos" class="nav-link text-white" routerLinkActive="active">Equipos</a>
       </li>
-      <li>
+
+      <li *ngIf="rolUsuario !== 'TECNICO' && rolUsuario !== 'TÉCNICO'">
         <a routerLink="/donantes" class="nav-link text-white" routerLinkActive="active">Donantes</a>
       </li>
-      <li>
+
+      <li *ngIf="rolUsuario !== 'TECNICO' && rolUsuario !== 'TÉCNICO'">
         <a routerLink="/instituciones" class="nav-link text-white" routerLinkActive="active"
           >Instituciones</a
         >
       </li>
-      <li *ngIf="rolUsuario !== 'REGISTRADOR'">
+
+      <li
+        *ngIf="rolUsuario !== 'REGISTRADOR' && rolUsuario !== 'TECNICO' && rolUsuario !== 'TÉCNICO'"
+      >
         <a routerLink="/usuarios" class="nav-link text-white" routerLinkActive="active">Usuarios</a>
       </li>
-      <li>
+
+      <li *ngIf="rolUsuario !== 'TECNICO' && rolUsuario !== 'TÉCNICO'">
         <a routerLink="/despachos" class="nav-link text-white" routerLinkActive="active"
           >Despachos</a
         >
       </li>
-      <li *ngIf="rolUsuario !== 'ADMINISTRADOR'">
+
+      <li *ngIf="rolUsuario !== 'ADMINISTRADOR' && rolUsuario !== 'REGISTRADOR'">
         <a routerLink="/historial" class="nav-link text-white" routerLinkActive="active"
           >Historial</a
         >
       </li>
-      <li>
+
+      <li *ngIf="rolUsuario !== 'TECNICO' && rolUsuario !== 'TÉCNICO'">
         <a routerLink="/tipo-equipo" class="nav-link text-white" routerLinkActive="active"
           >Tipos de Equipo</a
         >
       </li>
-      <li>
+
+      <li *ngIf="rolUsuario !== 'TECNICO' && rolUsuario !== 'TÉCNICO'">
         <a routerLink="/estados-equipo" class="nav-link text-white" routerLinkActive="active"
           >Estados de Equipo</a
         >
       </li>
-      <li *ngIf="rolUsuario !== 'REGISTRADOR'">
+
+      <li
+        *ngIf="rolUsuario !== 'REGISTRADOR' && rolUsuario !== 'TECNICO' && rolUsuario !== 'TÉCNICO'"
+      >
         <a routerLink="/roles" class="nav-link text-white" routerLinkActive="active"
           >Roles de Usuario</a
         >
       </li>
-      <li>
-        <a routerLink="/reportes" class="nav-link text-white" routerLinkActive="active">
-          Reportes
-        </a>
+
+      <li *ngIf="rolUsuario !== 'TECNICO' && rolUsuario !== 'TÉCNICO'">
+        <a routerLink="/reportes" class="nav-link text-white" routerLinkActive="active">Reportes</a>
       </li>
     </ul>
     <hr />
-    <!--Agregado para mostrar el usuario-->
+
     <div
       *ngIf="usuarioActual as user"
       class="px-3 pb-3 mb-3 border-bottom border-secondary text-center text-white"
     >
       <small class="text-white-50 d-block" style="font-size: 0.75rem">Conectado como:</small>
-
       <span class="fw-bold d-block text-truncate" title="{{ user.sub }}">
         {{ user.sub }}
       </span>
-
       <span class="badge bg-success mt-2">
         {{ user.role || user.rol || user.authorities || 'Usuario' }}
       </span>
     </div>
-    <!--fin mostrar el usuario-->
+
     <button (click)="logout()" class="btn btn-danger w-100">Cerrar Sesión</button>
   </nav>
 
