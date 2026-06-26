@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import Chart from 'chart.js/auto';
+// NUEVO: Importamos el servicio de autenticación para leer el rol y correo
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,45 +17,113 @@ export class DashboardComponent implements OnInit {
   @ViewChild('graficoEstados') graficoEstados!: ElementRef;
   chart: any;
 
+  // --- VARIABLES PARA EL DASHBOARD GENERAL (Admin/Registrador) ---
   totalEquipos: number = 0;
   totalDespachos: number = 0;
   totalInstituciones: number = 0;
   totalUsuarios: number = 0;
   equiposRecientes: any[] = [];
 
+  // --- VARIABLES PARA EL DASHBOARD DEL TÉCNICO ---
+  rolUsuario: string = '';
+  correoUsuario: string = '';
+  misEquiposAsignados: number = 0;
+  misEquiposReparados: number = 0; // Operativos o listos para donar
+  miHistorial: any[] = [];
+
   constructor(
     private http: HttpClient,
-    private cdr: ChangeDetectorRef // Inyectamos el detector de cambios
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService // Inyectamos el servicio
   ) {}
 
   ngOnInit() {
-    this.cargarEstadisticas();
+    // 1. Averiguamos quién está logueado
+    const user = this.authService.obtenerDatosUsuario();
+    if (user) {
+      this.correoUsuario = user.sub; // Guardamos su correo para filtrar luego
+      this.rolUsuario = (user.role || user.rol || user.authorities || '').toUpperCase();
+    }
+
+    // 2. Decidimos qué dashboard cargar según el rol
+    if (this.rolUsuario === 'TECNICO' || this.rolUsuario === 'TÉCNICO') {
+      this.cargarEstadisticasTecnico();
+    } else {
+      this.cargarEstadisticasGeneral();
+    }
   }
 
-  cargarEstadisticas() {
+
+  // MÉTODO ORIGINAL: CARGA TODO (Administrador/Registrador)
+
+  cargarEstadisticasGeneral() {
     forkJoin({
-      // Si falla, ahora imprimirá el error exacto en consola antes de devolver el array vacío
-      equipos: this.http.get<any[]>('http://localhost:8080/api/equipos').pipe(catchError(e => { console.error('Error al traer equipos:', e); return of([]); })),
-      despachos: this.http.get<any[]>('http://localhost:8080/api/despachos').pipe(catchError(e => { console.error('Error al traer despachos:', e); return of([]); })),
-      instituciones: this.http.get<any[]>('http://localhost:8080/api/instituciones').pipe(catchError(e => { console.error('Error al traer instituciones:', e); return of([]); })),
-      usuarios: this.http.get<any[]>('http://localhost:8080/api/usuarios').pipe(catchError(e => { console.error('Error al traer usuarios:', e); return of([]); }))
+      equipos: this.http.get<any[]>('http://localhost:8080/api/equipos').pipe(catchError(e => { console.error('Error equipos:', e); return of([]); })),
+      despachos: this.http.get<any[]>('http://localhost:8080/api/despachos').pipe(catchError(e => { console.error('Error despachos:', e); return of([]); })),
+      instituciones: this.http.get<any[]>('http://localhost:8080/api/instituciones').pipe(catchError(e => { console.error('Error instituciones:', e); return of([]); })),
+      usuarios: this.http.get<any[]>('http://localhost:8080/api/usuarios').pipe(catchError(e => { console.error('Error usuarios:', e); return of([]); }))
     }).subscribe({
       next: (data) => {
         this.totalEquipos = data.equipos.length;
         this.totalDespachos = data.despachos.length;
         this.totalInstituciones = data.instituciones.length;
         this.totalUsuarios = data.usuarios.length;
-
         this.equiposRecientes = data.equipos.slice(-5).reverse();
 
-        // Forzamos a Angular a "despertar" y dibujar los números en el HTML
         this.cdr.detectChanges();
 
         if (this.totalEquipos > 0) {
           this.generarGrafico(data.equipos);
         }
       },
-      error: (err) => console.error("Error crítico en el Dashboard", err)
+      error: (err) => console.error("Error crítico en Dashboard", err)
+    });
+  }
+
+
+  //  CARGA SOLO LO DEL TÉCNICO (Con datos reales)
+
+  cargarEstadisticasTecnico() {
+    forkJoin({
+      equipos: this.http.get<any[]>('http://localhost:8080/api/equipos').pipe(
+        catchError(e => {
+          console.error('Dashboard Técnico -> Error al traer equipos:', e);
+          return of([]);
+        })
+      ),
+      historial: this.http.get<any[]>('http://localhost:8080/api/historial-cambios').pipe(
+        catchError(e => {
+          console.error('Dashboard Técnico -> Error al traer historial:', e);
+          return of([]);
+        })
+      )
+    }).subscribe({
+      next: (data) => {
+        // 1. Filtrado de Equipos Asignados
+
+        const misEquipos = data.equipos.filter(eq => eq.usuarioResponsable?.correo === this.correoUsuario);
+        this.misEquiposAsignados = misEquipos.length;
+
+        // 2. Filtrado de Equipos Operativos o Listos para Donación
+
+        this.misEquiposReparados = misEquipos.filter(eq =>
+          eq.estadoActual?.nombreEstado === 'Operativo' ||
+          eq.estadoActual?.nombreEstado === 'Listo para Donación' ||
+          eq.estadoActual?.nombreEstado === 'Donado'
+        ).length;
+
+        // 3. Filtrado de Historial del Técnico
+        // Filtramos por  correo, ordena los últimos y tomamos 5
+        this.miHistorial = data.historial
+          .filter(h => h.usuarioResponsable?.correo === this.correoUsuario)
+          .slice(-5)
+          .reverse();
+
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error("Error crítico en el suscriptor del Dashboard Técnico", err);
+      }
     });
   }
 
