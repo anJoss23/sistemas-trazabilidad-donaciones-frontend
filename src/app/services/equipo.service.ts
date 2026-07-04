@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class EquipoService {
-  private apiUrl = 'http://localhost:8080/api/equipos';
+  private apiUrl = 'https://localhost:8080/api/equipos';
 
   constructor(private http: HttpClient) { }
 

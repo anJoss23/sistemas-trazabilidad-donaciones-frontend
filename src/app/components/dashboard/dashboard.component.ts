@@ -58,10 +58,10 @@ export class DashboardComponent implements OnInit {
 
   cargarEstadisticasGeneral() {
     forkJoin({
-      equipos: this.http.get<any[]>('http://localhost:8080/api/equipos').pipe(catchError(e => { console.error('Error equipos:', e); return of([]); })),
-      despachos: this.http.get<any[]>('http://localhost:8080/api/despachos').pipe(catchError(e => { console.error('Error despachos:', e); return of([]); })),
-      instituciones: this.http.get<any[]>('http://localhost:8080/api/instituciones').pipe(catchError(e => { console.error('Error instituciones:', e); return of([]); })),
-      usuarios: this.http.get<any[]>('http://localhost:8080/api/usuarios').pipe(catchError(e => { console.error('Error usuarios:', e); return of([]); }))
+      equipos: this.http.get<any[]>('https://localhost:8080/api/equipos').pipe(catchError(e => { console.error('Error equipos:', e); return of([]); })),
+      despachos: this.http.get<any[]>('https://localhost:8080/api/despachos').pipe(catchError(e => { console.error('Error despachos:', e); return of([]); })),
+      instituciones: this.http.get<any[]>('https://localhost:8080/api/instituciones').pipe(catchError(e => { console.error('Error instituciones:', e); return of([]); })),
+      usuarios: this.http.get<any[]>('https://localhost:8080/api/usuarios').pipe(catchError(e => { console.error('Error usuarios:', e); return of([]); }))
     }).subscribe({
       next: (data) => {
         this.totalEquipos = data.equipos.length;
@@ -85,13 +85,13 @@ export class DashboardComponent implements OnInit {
 
   cargarEstadisticasTecnico() {
     forkJoin({
-      equipos: this.http.get<any[]>('http://localhost:8080/api/equipos').pipe(
+      equipos: this.http.get<any[]>('https://localhost:8080/api/equipos').pipe(
         catchError(e => {
           console.error('Dashboard Técnico -> Error al traer equipos:', e);
           return of([]);
         })
       ),
-      historial: this.http.get<any[]>('http://localhost:8080/api/historial-cambios').pipe(
+      historial: this.http.get<any[]>('https://localhost:8080/api/historial-cambios').pipe(
         catchError(e => {
           console.error('Dashboard Técnico -> Error al traer historial:', e);
           return of([]);

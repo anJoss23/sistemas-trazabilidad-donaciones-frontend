@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class HistorialService {
-  private url = 'http://localhost:8080/api/historial-cambios';
+  private url = 'https://localhost:8080/api/historial-cambios';
 
   constructor(private http: HttpClient) {}
 

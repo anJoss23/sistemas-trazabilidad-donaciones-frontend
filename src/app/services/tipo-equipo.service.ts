@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class TipoEquipoService {
-  private url = 'http://localhost:8080/api/tipos-equipo';
+  private url = 'https://localhost:8080/api/tipos-equipo';
 
   constructor(private http: HttpClient) {}
 

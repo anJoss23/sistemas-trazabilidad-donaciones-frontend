@@ -44,10 +44,10 @@ export class HistorialComponent implements OnInit {
       this.listaHistorial = data;
       this.cdr.detectChanges();
     });
-    this.http.get('http://localhost:8080/api/equipos').subscribe((data: any) => this.listaEquipos = data);
-    //this.http.get('http://localhost:8080/api/usuarios').subscribe((data: any) => this.listaUsuarios = data);
+    this.http.get('https://localhost:8080/api/equipos').subscribe((data: any) => this.listaEquipos = data);
+    //this.http.get('https://localhost:8080/api/usuarios').subscribe((data: any) => this.listaUsuarios = data);
     // MODIFICADO: Filtramos la lista de usuarios para que solo guarde a los Técnicos
-    this.http.get<any[]>('http://localhost:8080/api/usuarios').subscribe((data: any[]) => {
+    this.http.get<any[]>('https://localhost:8080/api/usuarios').subscribe((data: any[]) => {
       this.listaUsuarios = data.filter(u => {
         // Extraemos el nombre del rol, manejando posibles valores nulos
         const nombreRol = (u.rol?.nombreRol || u.rol?.nombre || '').toUpperCase();
@@ -56,7 +56,7 @@ export class HistorialComponent implements OnInit {
       });
     });
 
-    this.http.get('http://localhost:8080/api/estados-equipo').subscribe((data: any) => this.listaEstados = data);
+    this.http.get('https://localhost:8080/api/estados-equipo').subscribe((data: any) => this.listaEstados = data);
   }
 
   // Lógica para auto-llenar el estado anterior

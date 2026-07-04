@@ -44,7 +44,7 @@ export class UsuariosComponent implements OnInit {
 
   // FUNCIÓN PARA TRAER ROLES DE MySQL
   cargarRoles() {
-    this.http.get<any[]>('http://localhost:8080/api/roles').subscribe(data => {
+    this.http.get<any[]>('https://localhost:8080/api/roles').subscribe(data => {
       this.listaRoles = data;
       this.cdr.detectChanges();
     });

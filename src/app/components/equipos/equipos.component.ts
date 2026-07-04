@@ -52,12 +52,12 @@ export class EquiposComponent implements OnInit {
   }
 
   cargarCatalogos() {
-    this.http.get<any[]>('http://localhost:8080/api/tipos-equipo').subscribe(data => { this.listaTipos = data; this.cdr.detectChanges(); });
-    this.http.get<any[]>('http://localhost:8080/api/estados-equipo').subscribe(data => { this.listaEstados = data; this.cdr.detectChanges(); });
-    this.http.get<any[]>('http://localhost:8080/api/donantes').subscribe(data => { this.listaDonantes = data; this.cdr.detectChanges(); });
+    this.http.get<any[]>('https://localhost:8080/api/tipos-equipo').subscribe(data => { this.listaTipos = data; this.cdr.detectChanges(); });
+    this.http.get<any[]>('https://localhost:8080/api/estados-equipo').subscribe(data => { this.listaEstados = data; this.cdr.detectChanges(); });
+    this.http.get<any[]>('https://localhost:8080/api/donantes').subscribe(data => { this.listaDonantes = data; this.cdr.detectChanges(); });
 
     // CAMBIO AQUÍ: Ahora pedimos específicamente a los "tecnicos"
-    this.http.get<any[]>('http://localhost:8080/api/usuarios/tecnicos').subscribe(data => {
+    this.http.get<any[]>('https://localhost:8080/api/usuarios/tecnicos').subscribe(data => {
       this.listaUsuarios = data;
       this.cdr.detectChanges();
     });}

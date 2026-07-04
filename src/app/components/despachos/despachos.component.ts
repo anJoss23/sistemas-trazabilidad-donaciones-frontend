@@ -49,9 +49,9 @@ export class DespachosComponent implements OnInit {
       this.listaDespachos = data;
       this.cdr.detectChanges();
     });
-    this.http.get('http://localhost:8080/api/instituciones').subscribe((data: any) => this.listaInstituciones = data);
-    this.http.get('http://localhost:8080/api/usuarios').subscribe((data: any) => this.listaUsuarios = data);
-    this.http.get('http://localhost:8080/api/equipos').subscribe((data: any) => this.listaEquipos = data);
+    this.http.get('https://localhost:8080/api/instituciones').subscribe((data: any) => this.listaInstituciones = data);
+    this.http.get('https://localhost:8080/api/usuarios').subscribe((data: any) => this.listaUsuarios = data);
+    this.http.get('https://localhost:8080/api/equipos').subscribe((data: any) => this.listaEquipos = data);
   }
 
   // --- LÓGICA DE CHECKBOXES ---

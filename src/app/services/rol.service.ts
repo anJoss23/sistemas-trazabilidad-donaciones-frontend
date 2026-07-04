@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class RolService {
-  private url = 'http://localhost:8080/api/roles';
+  private url = 'https://localhost:8080/api/roles';
   constructor(private http: HttpClient) {}
   listar(): Observable<any> { return this.http.get(this.url); }
   guardar(r: any): Observable<any> {
