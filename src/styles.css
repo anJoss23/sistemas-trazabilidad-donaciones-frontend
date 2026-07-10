@@ -1,6 +1,76 @@
+
+/* ==========================================================================
+   REDISEÑO VISUAL ECODIGITAL - VERSIÓN SEGURA (Solo Cosmética)
+   ========================================================================== */
+
+/* 1. Importar Tipografía Moderna (Inter) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* 2. Variables Globales */
+:root {
+  --eco-primary: #10b981;
+  --eco-primary-hover: #059669;
+  --eco-secondary: #334155;
+  --eco-bg: #f8fafc;
+  --eco-radius: 12px;
+  --eco-shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
+  --eco-shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+}
+
+/* 3. Estilos Base */
+body {
+  font-family: 'Inter', sans-serif !important;
+  background-color: var(--eco-bg); /* Sin !important para respetar clases bg-* de Bootstrap si las tienes */
+}
+
+/* 4. Tarjetas (Cards) - Solo bordes y sombras */
+.card {
+  border-radius: var(--eco-radius) !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: var(--eco-shadow-sm) !important;
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: var(--eco-shadow-md) !important;
+}
+
+.card-header {
+  background-color: transparent !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+/* 5. Botones - Solo color y esquinas redondeadas */
+.btn {
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-primary {
+  background-color: var(--eco-primary) !important;
+  border-color: var(--eco-primary) !important;
+  color: white !important;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background-color: var(--eco-primary-hover) !important;
+  border-color: var(--eco-primary-hover) !important;
+}
+
+/* 6. Formularios (Inputs) - Resplandor verde estilo Bootstrap */
+.form-control, .form-select {
+  border-radius: 8px !important;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--eco-primary) !important;
+  box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25) !important;
+}
 .nav-link.active {
   background-color: #0d6efd !important;
 }
 .nav-link:hover {
   background-color: #495057;
 }
+
+

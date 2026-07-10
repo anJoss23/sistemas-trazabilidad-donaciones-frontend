@@ -149,8 +149,10 @@ export class DashboardComponent implements OnInit {
             labels: labels,
             datasets: [{
               data: datos,
-              backgroundColor: ['#0d6efd', '#198754', '#ffc107', '#dc3545', '#0dcaf0', '#6c757d'],
-              borderWidth: 1
+              // AQUÍ ESTÁ EL CAMBIO: Colores modernos alineados al rediseño
+              backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#64748b'],
+              borderWidth: 0, // Quitamos el borde para que se vea más limpio
+              hoverOffset: 4
             }]
           },
           options: {
