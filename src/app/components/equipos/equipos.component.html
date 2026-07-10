@@ -1,96 +1,200 @@
 <div class="container mt-4">
   <div class="card p-4 shadow-sm mb-4 border-primary">
     <h3 class="text-primary mb-3">Gestión de Equipos e Inventario</h3>
-    <form (ngSubmit)="registrar()">
+
+    <form (ngSubmit)="registrar()" #equipoForm="ngForm">
       <div class="row">
         <div class="col-md-3 mb-3">
-          <label class="fw-bold text-muted">N° Serie</label>
+          <label class="fw-bold text-muted">N° Serie <span class="text-danger">*</span></label>
           <input
             [(ngModel)]="nuevoEquipo.numeroSerie"
             name="numeroSerie"
             class="form-control"
             required
+            minlength="3"
+            #serieInput="ngModel"
+            [ngClass]="{
+              'is-invalid': serieInput.invalid && (serieInput.dirty || serieInput.touched),
+            }"
           />
+          <div
+            *ngIf="serieInput.invalid && (serieInput.dirty || serieInput.touched)"
+            class="invalid-feedback"
+          >
+            <span *ngIf="serieInput.errors?.['required']">El N° de serie es obligatorio.</span>
+            <span *ngIf="serieInput.errors?.['minlength']">Debe tener al menos 3 caracteres.</span>
+          </div>
         </div>
+
         <div class="col-md-3 mb-3">
-          <label class="fw-bold text-muted">Marca</label>
-          <input [(ngModel)]="nuevoEquipo.marca" name="marca" class="form-control" required />
+          <label class="fw-bold text-muted">Marca <span class="text-danger">*</span></label>
+          <input
+            [(ngModel)]="nuevoEquipo.marca"
+            name="marca"
+            class="form-control"
+            required
+            #marcaInput="ngModel"
+            [ngClass]="{
+              'is-invalid': marcaInput.invalid && (marcaInput.dirty || marcaInput.touched),
+            }"
+          />
+          <div
+            *ngIf="marcaInput.invalid && (marcaInput.dirty || marcaInput.touched)"
+            class="invalid-feedback"
+          >
+            La marca es obligatoria.
+          </div>
         </div>
+
         <div class="col-md-3 mb-3">
-          <label class="fw-bold text-muted">Modelo</label>
-          <input [(ngModel)]="nuevoEquipo.modelo" name="modelo" class="form-control" required />
+          <label class="fw-bold text-muted">Modelo <span class="text-danger">*</span></label>
+          <input
+            [(ngModel)]="nuevoEquipo.modelo"
+            name="modelo"
+            class="form-control"
+            required
+            #modeloInput="ngModel"
+            [ngClass]="{
+              'is-invalid': modeloInput.invalid && (modeloInput.dirty || modeloInput.touched),
+            }"
+          />
+          <div
+            *ngIf="modeloInput.invalid && (modeloInput.dirty || modeloInput.touched)"
+            class="invalid-feedback"
+          >
+            El modelo es obligatorio.
+          </div>
         </div>
+
         <div class="col-md-3 mb-3">
-          <label class="fw-bold text-muted">Fecha</label>
+          <label class="fw-bold text-muted">Fecha <span class="text-danger">*</span></label>
           <input
             type="date"
             [(ngModel)]="nuevoEquipo.fechaRecepcion"
             name="fechaRecepcion"
             class="form-control"
             required
+            #fechaInput="ngModel"
+            [ngClass]="{
+              'is-invalid': fechaInput.invalid && (fechaInput.dirty || fechaInput.touched),
+            }"
           />
+          <div
+            *ngIf="fechaInput.invalid && (fechaInput.dirty || fechaInput.touched)"
+            class="invalid-feedback"
+          >
+            La fecha es obligatoria.
+          </div>
         </div>
 
         <div class="col-md-3 mb-3">
-          <label class="fw-bold text-muted">Tipo</label>
+          <label class="fw-bold text-muted">Tipo <span class="text-danger">*</span></label>
           <select
             [(ngModel)]="nuevoEquipo.tipoEquipo.tipoId"
             name="tipoId"
             class="form-select"
             required
+            #tipoInput="ngModel"
+            [ngClass]="{
+              'is-invalid': tipoInput.invalid && (tipoInput.dirty || tipoInput.touched),
+            }"
           >
             <option [ngValue]="null">-- Seleccione --</option>
             <option *ngFor="let t of listaTipos" [value]="t.tipoId">{{ t.nombreTipo }}</option>
           </select>
+          <div
+            *ngIf="tipoInput.invalid && (tipoInput.dirty || tipoInput.touched)"
+            class="invalid-feedback"
+          >
+            Seleccione un tipo.
+          </div>
         </div>
+
         <div class="col-md-3 mb-3">
-          <label class="fw-bold text-muted">Estado</label>
+          <label class="fw-bold text-muted">Estado <span class="text-danger">*</span></label>
           <select
             [(ngModel)]="nuevoEquipo.estadoActual.estadoId"
             name="estadoId"
             class="form-select"
             required
+            #estadoInput="ngModel"
+            [ngClass]="{
+              'is-invalid': estadoInput.invalid && (estadoInput.dirty || estadoInput.touched),
+            }"
           >
             <option [ngValue]="null">-- Seleccione --</option>
             <option *ngFor="let e of listaEstados" [value]="e.estadoId">
               {{ e.nombreEstado }}
             </option>
           </select>
+          <div
+            *ngIf="estadoInput.invalid && (estadoInput.dirty || estadoInput.touched)"
+            class="invalid-feedback"
+          >
+            El estado es obligatorio.
+          </div>
         </div>
+
         <div class="col-md-3 mb-3">
-          <label class="fw-bold text-muted">Donante</label>
+          <label class="fw-bold text-muted">Donante <span class="text-danger">*</span></label>
           <select
             [(ngModel)]="nuevoEquipo.donante.donanteId"
             name="donanteId"
             class="form-select"
             required
+            #donanteInput="ngModel"
+            [ngClass]="{
+              'is-invalid': donanteInput.invalid && (donanteInput.dirty || donanteInput.touched),
+            }"
           >
             <option [ngValue]="null">-- Seleccione --</option>
             <option *ngFor="let d of listaDonantes" [value]="d.donanteId">
               {{ d.razonSocial }}
             </option>
           </select>
+          <div
+            *ngIf="donanteInput.invalid && (donanteInput.dirty || donanteInput.touched)"
+            class="invalid-feedback"
+          >
+            El donante es obligatorio.
+          </div>
         </div>
 
         <div class="col-md-3 mb-3">
-          <label class="fw-bold text-muted">Técnico Responsable</label>
+          <label class="fw-bold text-muted"
+            >Técnico Responsable <span class="text-danger">*</span></label
+          >
           <select
             [(ngModel)]="nuevoEquipo.usuarioResponsable.usuarioId"
             name="usuarioId"
             class="form-select"
             required
+            #usuarioInput="ngModel"
+            [ngClass]="{
+              'is-invalid': usuarioInput.invalid && (usuarioInput.dirty || usuarioInput.touched),
+            }"
           >
             <option [ngValue]="null">-- Seleccione Técnico --</option>
             <option *ngFor="let u of listaUsuarios" [value]="u.usuarioId">{{ u.nombre }}</option>
           </select>
+          <div
+            *ngIf="usuarioInput.invalid && (usuarioInput.dirty || usuarioInput.touched)"
+            class="invalid-feedback"
+          >
+            Debe asignar un técnico.
+          </div>
         </div>
       </div>
 
       <div>
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" class="btn btn-primary" [disabled]="equipoForm.invalid">
           {{ nuevoEquipo.equipoId ? 'Actualizar' : 'Guardar' }}
         </button>
-        <button type="button" class="btn btn-secondary ms-2" (click)="limpiarFormulario()">
+        <button
+          type="button"
+          class="btn btn-secondary ms-2"
+          (click)="limpiarFormulario(); equipoForm.resetForm()"
+        >
           Limpiar
         </button>
       </div>
