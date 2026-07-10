@@ -1,0 +1,109 @@
+/* ==========================================================================
+   SIDEBAR PROFESIONAL SEGURO - ARCHIVO: app.css
+   ========================================================================== */
+
+/* Forzar comportamiento del elemento raíz del componente en el navegador */
+:host {
+  display: block !important;
+  background-color: #f8fafc !important;
+  min-height: 100vh !important;
+}
+
+/* MENÚ LATERAL: Color Sólido Premium (Slate Oscuro) */
+.eco-sidebar {
+  width: 280px !important;
+  min-height: 100vh !important;
+  background-color: #0f172a !important;
+  background: #0f172a !important;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15) !important;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  border-right: 1px solid #1e293b !important;
+}
+
+.eco-divider {
+  border-color: #1e293b !important;
+  opacity: 0.3 !important;
+  margin: 1rem 0;
+}
+
+/* Limpieza de viñetas en la lista */
+.eco-nav {
+  list-style: none !important;
+  list-style-type: none !important;
+  padding-left: 0 !important;
+  margin-bottom: 0 !important;
+  width: 100%;
+}
+
+.eco-nav li {
+  list-style: none !important;
+  list-style-type: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Enlaces de Navegación */
+.eco-nav .nav-link {
+  color: #94a3b8 !important; /* Gris elegante desactivado */
+  border-radius: 8px !important;
+  padding: 0.85rem 1.25rem !important;
+  margin-bottom: 0.4rem !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease-in-out !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  text-decoration: none !important;
+}
+
+/* Hover: Al pasar el ratón */
+.eco-nav .nav-link:hover {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+  transform: translateX(3px) !important;
+}
+
+/* Estado Activo: Botón verde esmeralda para la pantalla actual */
+.eco-nav .nav-link.active-eco {
+  background-color: #10b981 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25) !important;
+  font-weight: 600 !important;
+}
+
+/* Forzar tamaño de iconos */
+.eco-nav .nav-link i {
+  font-size: 1.1rem !important;
+}
+
+/* Caja de Perfil de Usuario */
+.user-profile {
+  background-color: #1e293b !important;
+  border: 1px solid #334155 !important;
+}
+
+.bg-primary-eco {
+  background-color: #10b981 !important;
+  color: white !important;
+}
+
+/* Botón de Salida */
+.btn-logout {
+  background-color: transparent !important;
+  border: 1px solid #475569 !important;
+  color: #cbd5e1 !important;
+  transition: all 0.2s !important;
+}
+
+.btn-logout:hover {
+  background-color: rgba(239, 68, 68, 0.1) !important;
+  border-color: #ef4444 !important;
+  color: #ef4444 !important;
+}
+
+/* Contenedor de las vistas internas */
+.main-content {
+  min-height: 100vh !important;
+  background-color: #f8fafc !important;
+}
