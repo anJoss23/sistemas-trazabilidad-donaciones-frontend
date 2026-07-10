@@ -1,56 +1,99 @@
 <div class="container mt-4">
   <div class="card p-4 shadow-sm mb-4 border-success">
     <h3 class="text-success mb-3">Gestión de Despachos / Donaciones</h3>
-    <form (ngSubmit)="guardar()">
+
+    <form (ngSubmit)="guardar(despachoForm)" #despachoForm="ngForm">
       <div class="row">
         <div class="col-md-6 mb-3">
-          <label class="fw-bold">Institución Destino</label>
+          <label class="fw-bold">Institución Destino <span class="text-danger">*</span></label>
           <select
             [(ngModel)]="despacho.institucion.institucionId"
             name="institucionId"
             class="form-select"
             required
+            #instInput="ngModel"
+            [ngClass]="{
+              'is-invalid': instInput.invalid && (instInput.dirty || instInput.touched),
+            }"
           >
             <option [ngValue]="null">-- Seleccione el Colegio --</option>
             <option *ngFor="let inst of listaInstituciones" [value]="inst.institucionId">
               {{ inst.nombreColegio }}
             </option>
           </select>
+          <div
+            *ngIf="instInput.invalid && (instInput.dirty || instInput.touched)"
+            class="invalid-feedback"
+          >
+            Debe seleccionar una institución destino.
+          </div>
         </div>
 
         <div class="col-md-6 mb-3">
-          <label class="fw-bold">Usuario / Técnico que despacha</label>
+          <label class="fw-bold"
+            >Usuario / Técnico que despacha <span class="text-danger">*</span></label
+          >
           <select
             [(ngModel)]="despacho.usuarioResponsable.usuarioId"
             name="usuarioId"
             class="form-select"
             required
+            #userInput="ngModel"
+            [ngClass]="{
+              'is-invalid': userInput.invalid && (userInput.dirty || userInput.touched),
+            }"
           >
             <option [ngValue]="null">-- Seleccione Responsable --</option>
             <option *ngFor="let u of listaUsuarios" [value]="u.usuarioId">{{ u.nombre }}</option>
           </select>
+          <div
+            *ngIf="userInput.invalid && (userInput.dirty || userInput.touched)"
+            class="invalid-feedback"
+          >
+            Debe seleccionar al responsable del despacho.
+          </div>
         </div>
 
         <div class="col-md-4 mb-3">
-          <label class="fw-bold">N° Guía de Remisión</label>
+          <label class="fw-bold">N° Guía de Remisión <span class="text-danger">*</span></label>
           <input
             [(ngModel)]="despacho.numeroGuiaRemision"
             name="guia"
             class="form-control"
             placeholder="Ej. 001-000554"
             required
+            #guiaInput="ngModel"
+            [ngClass]="{
+              'is-invalid': guiaInput.invalid && (guiaInput.dirty || guiaInput.touched),
+            }"
           />
+          <div
+            *ngIf="guiaInput.invalid && (guiaInput.dirty || guiaInput.touched)"
+            class="invalid-feedback"
+          >
+            El número de guía es obligatorio.
+          </div>
         </div>
 
         <div class="col-md-4 mb-3">
-          <label class="fw-bold">Fecha de Envío</label>
+          <label class="fw-bold">Fecha de Envío <span class="text-danger">*</span></label>
           <input
             type="date"
             [(ngModel)]="despacho.fechaEnvio"
             name="fechaEnvio"
             class="form-control"
             required
+            #fechaInput="ngModel"
+            [ngClass]="{
+              'is-invalid': fechaInput.invalid && (fechaInput.dirty || fechaInput.touched),
+            }"
           />
+          <div
+            *ngIf="fechaInput.invalid && (fechaInput.dirty || fechaInput.touched)"
+            class="invalid-feedback"
+          >
+            La fecha de envío es obligatoria.
+          </div>
         </div>
 
         <div class="col-md-4 mb-3">
@@ -65,11 +108,12 @@
 
         <div class="col-md-12 mb-3">
           <label class="fw-bold text-success mb-2"
-            >Equipos a Despachar (Seleccione las casillas)</label
+            >Equipos a Despachar (Seleccione las casillas) <span class="text-danger">*</span></label
           >
           <div
             class="border rounded p-3"
             style="height: 180px; overflow-y: auto; background-color: #f8f9fa"
+            [ngClass]="{ 'border-danger': despacho.equipos.length === 0 && despachoForm.submitted }"
           >
             <div class="form-check mb-2 pb-2 border-bottom" *ngFor="let eq of listaEquipos">
               <input
@@ -106,15 +150,29 @@
               No hay equipos registrados.
             </div>
           </div>
+          <div
+            *ngIf="despacho.equipos.length === 0 && despachoForm.submitted"
+            class="text-danger mt-1"
+            style="font-size: 0.875em"
+          >
+            Debe seleccionar al menos un equipo.
+          </div>
         </div>
       </div>
 
-      <button type="submit" class="btn btn-success fw-bold">Guardar Despacho</button>
+      <button
+        type="submit"
+        class="btn btn-success fw-bold"
+        [disabled]="despachoForm.invalid || despacho.equipos.length === 0"
+      >
+        Guardar Despacho
+      </button>
+
       <button
         type="button"
         class="btn btn-secondary ms-2 fw-bold"
-        (click)="limpiar()"
-        *ngIf="despacho.donacionId"
+        (click)="limpiar(despachoForm)"
+        *ngIf="despacho.donacionId || despachoForm.dirty"
       >
         Cancelar Edición
       </button>
@@ -151,7 +209,6 @@
           <button (click)="generarPDF(d)" class="btn btn-danger btn-sm me-2" title="Imprimir Guía">
             PDF
           </button>
-
           <button (click)="editar(d)" class="btn btn-warning btn-sm me-2">Editar</button>
           <button (click)="eliminar(d.donacionId)" class="btn btn-outline-danger btn-sm">
             Eliminar

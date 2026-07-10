@@ -1,34 +1,149 @@
 <div class="container mt-4">
   <div class="card p-4 shadow-sm mb-4">
     <h3>Gestión de Donantes</h3>
-    <form (ngSubmit)="guardar()">
+
+    <form (ngSubmit)="guardar(donanteForm)" #donanteForm="ngForm">
       <div class="row">
         <div class="col-md-6 mb-3">
-          <label>Razón Social</label
-          ><input [(ngModel)]="donante.razonSocial" name="rs" class="form-control" required />
+          <label>Razón Social <span class="text-danger">*</span></label>
+          <input
+            [(ngModel)]="donante.razonSocial"
+            name="rs"
+            class="form-control"
+            required
+            minlength="3"
+            #rsInput="ngModel"
+            [ngClass]="{ 'is-invalid': rsInput.invalid && (rsInput.dirty || rsInput.touched) }"
+          />
+          <div
+            *ngIf="rsInput.invalid && (rsInput.dirty || rsInput.touched)"
+            class="invalid-feedback"
+          >
+            <span *ngIf="rsInput.errors?.['required']">La razón social es obligatoria.</span>
+            <span *ngIf="rsInput.errors?.['minlength']">Debe tener al menos 3 caracteres.</span>
+          </div>
         </div>
+
         <div class="col-md-6 mb-3">
-          <label>RUC/DNI</label
-          ><input [(ngModel)]="donante.rucDni" name="ruc" class="form-control" />
+          <label>RUC/DNI <span class="text-danger">*</span></label>
+          <input
+            [(ngModel)]="donante.rucDni"
+            name="ruc"
+            class="form-control"
+            required
+            pattern="^[0-9]{8,11}$"
+            #rucInput="ngModel"
+            [ngClass]="{ 'is-invalid': rucInput.invalid && (rucInput.dirty || rucInput.touched) }"
+          />
+          <div
+            *ngIf="rucInput.invalid && (rucInput.dirty || rucInput.touched)"
+            class="invalid-feedback"
+          >
+            <span *ngIf="rucInput.errors?.['required']">El documento es obligatorio.</span>
+            <span *ngIf="rucInput.errors?.['pattern']"
+              >Debe contener entre 8 y 11 números, sin letras ni espacios.</span
+            >
+          </div>
         </div>
+
         <div class="col-md-6 mb-3">
-          <label>Contacto</label
-          ><input [(ngModel)]="donante.contactoNombre" name="con" class="form-control" />
+          <label>Contacto <span class="text-danger">*</span></label>
+          <input
+            [(ngModel)]="donante.contactoNombre"
+            name="con"
+            class="form-control"
+            required
+            minlength="3"
+            #conInput="ngModel"
+            [ngClass]="{ 'is-invalid': conInput.invalid && (conInput.dirty || conInput.touched) }"
+          />
+          <div
+            *ngIf="conInput.invalid && (conInput.dirty || conInput.touched)"
+            class="invalid-feedback"
+          >
+            <span *ngIf="conInput.errors?.['required']">El nombre de contacto es obligatorio.</span>
+            <span *ngIf="conInput.errors?.['minlength']">Debe tener al menos 3 caracteres.</span>
+          </div>
         </div>
+
         <div class="col-md-6 mb-3">
-          <label>Correo</label
-          ><input [(ngModel)]="donante.correo" name="cor" class="form-control" />
+          <label>Correo <span class="text-danger">*</span></label>
+          <input
+            type="email"
+            [(ngModel)]="donante.correo"
+            name="cor"
+            class="form-control"
+            required
+            email
+            #corInput="ngModel"
+            [ngClass]="{ 'is-invalid': corInput.invalid && (corInput.dirty || corInput.touched) }"
+          />
+          <div
+            *ngIf="corInput.invalid && (corInput.dirty || corInput.touched)"
+            class="invalid-feedback"
+          >
+            <span *ngIf="corInput.errors?.['required']">El correo es obligatorio.</span>
+            <span *ngIf="corInput.errors?.['email']"
+              >Ingrese un formato de correo válido (ej. correo@dominio.com).</span
+            >
+          </div>
         </div>
+
         <div class="col-md-6 mb-3">
-          <label>Teléfono</label
-          ><input [(ngModel)]="donante.telefono" name="tel" class="form-control" />
+          <label>Teléfono <span class="text-danger">*</span></label>
+          <input
+            [(ngModel)]="donante.telefono"
+            name="tel"
+            class="form-control"
+            required
+            pattern="^[0-9+\- ]{7,15}$"
+            #telInput="ngModel"
+            [ngClass]="{ 'is-invalid': telInput.invalid && (telInput.dirty || telInput.touched) }"
+          />
+          <div
+            *ngIf="telInput.invalid && (telInput.dirty || telInput.touched)"
+            class="invalid-feedback"
+          >
+            <span *ngIf="telInput.errors?.['required']">El teléfono es obligatorio.</span>
+            <span *ngIf="telInput.errors?.['pattern']"
+              >Ingrese un número válido (mínimo 7 dígitos, se acepta +).</span
+            >
+          </div>
         </div>
+
         <div class="col-md-6 mb-3">
-          <label>Dirección</label
-          ><input [(ngModel)]="donante.direccion" name="dir" class="form-control" />
+          <label>Dirección <span class="text-danger">*</span></label>
+          <input
+            [(ngModel)]="donante.direccion"
+            name="dir"
+            class="form-control"
+            required
+            minlength="5"
+            #dirInput="ngModel"
+            [ngClass]="{ 'is-invalid': dirInput.invalid && (dirInput.dirty || dirInput.touched) }"
+          />
+          <div
+            *ngIf="dirInput.invalid && (dirInput.dirty || dirInput.touched)"
+            class="invalid-feedback"
+          >
+            <span *ngIf="dirInput.errors?.['required']">La dirección es obligatoria.</span>
+            <span *ngIf="dirInput.errors?.['minlength']">Ingrese una dirección más detallada.</span>
+          </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">Guardar</button>
+
+      <button type="submit" class="btn btn-primary" [disabled]="donanteForm.invalid">
+        Guardar
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-secondary ms-2"
+        (click)="limpiar(donanteForm)"
+        *ngIf="donante.donanteId || donanteForm.dirty"
+      >
+        Cancelar
+      </button>
 
       <div *ngIf="mensajeExito" class="alert alert-success mt-3" role="alert">
         {{ mensajeAccion }}
@@ -52,7 +167,7 @@
         <td>{{ d.razonSocial }}</td>
         <td>{{ d.rucDni }}</td>
         <td>
-          <button (click)="editar(d)" class="btn btn-warning btn-sm">Editar</button>
+          <button (click)="editar(d)" class="btn btn-warning btn-sm me-1">Editar</button>
           <button (click)="eliminar(d.donanteId)" class="btn btn-danger btn-sm">Eliminar</button>
         </td>
       </tr>

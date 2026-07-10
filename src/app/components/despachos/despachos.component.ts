@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule , NgForm} from '@angular/forms';
 import { DespachoService } from '../../services/despacho.service';
 import { HttpClient } from '@angular/common/http';
 import { jsPDF } from 'jspdf';
@@ -78,7 +78,8 @@ export class DespachosComponent implements OnInit {
     }
   }
 
-  guardar() {
+  // AHORA RECIBE form: NgForm
+  guardar(form: NgForm) {
     if (this.despacho.equipos.length === 0) {
       alert("Por favor, seleccione al menos un equipo para despachar.");
       return;
@@ -88,6 +89,12 @@ export class DespachosComponent implements OnInit {
     this.despachoService.guardar(this.despacho).subscribe({
       next: () => {
         this.cargarDatos();
+
+        // Magia para borrar los bordes rojos
+        if (form) {
+          form.resetForm();
+        }
+
         this.limpiar();
         this.mensajeExito = true;
         setTimeout(() => this.mensajeExito = false, 3000);
@@ -97,7 +104,11 @@ export class DespachosComponent implements OnInit {
     });
   }
 
-  limpiar() {
+  // AHORA RECIBE form?: NgForm
+  limpiar(form?: NgForm) {
+    if (form) {
+      form.resetForm();
+    }
     this.despacho = {
       donacionId: null, institucion: { institucionId: null }, usuarioResponsable: { usuarioId: null },
       fechaEnvio: '', numeroGuiaRemision: '', documentoReferenciaGuia: '', equipos: []
