@@ -1,8 +1,8 @@
 <div class="container mt-4">
   <div class="card p-4 shadow-sm mb-4 border-primary">
     <h3 class="text-primary mb-3">Gestión de Equipos e Inventario</h3>
-
-    <form (ngSubmit)="registrar()" #equipoForm="ngForm">
+    <!--Se crea la variable form: equipoForm para controlar que la validacion se borre cuando Guarda -->
+    <form (ngSubmit)="registrar(equipoForm)" #equipoForm="ngForm">
       <div class="row">
         <div class="col-md-3 mb-3">
           <label class="fw-bold text-muted">N° Serie <span class="text-danger">*</span></label>

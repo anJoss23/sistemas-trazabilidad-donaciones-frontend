@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { EquipoService } from '../../services/equipo.service';
+import { NgForm } from '@angular/forms'; // <--- AGREGAR ESTA IMPORTACIÓN
 
 @Component({
   selector: 'app-equipos',
@@ -61,8 +62,9 @@ export class EquiposComponent implements OnInit {
       this.listaUsuarios = data;
       this.cdr.detectChanges();
     });}
-
-  registrar() {
+//MODIFICACIONES PARA LAS VALIDACIONES EN EL FRONTEND.
+  // 1. Recibimos el form como parámetro de la variable creada en el .html
+  registrar(form: NgForm) {
     const esEdicion = !!this.nuevoEquipo.equipoId;
     const operacion = esEdicion ? this.equipoService.actualizarEquipo(this.nuevoEquipo) : this.equipoService.registrarEquipo(this.nuevoEquipo);
 
@@ -70,7 +72,15 @@ export class EquiposComponent implements OnInit {
       next: () => {
         this.mensajeAccion = esEdicion ? 'Equipo editado correctamente' : 'Equipo registrado correctamente';
         this.mensajeExito = true;
+
+        // 2. Reseteamos el estado visual de las advertencias (se borra los bordes rojos y el historial de "tocado")
+        if (form) {
+          form.resetForm();
+        }
+
+        // 3. Volvemos a colocar tu estructura de datos limpia para evitar errores.
         this.limpiarFormulario();
+
         this.cargarLista();
         this.cdr.detectChanges();
         setTimeout(() => this.mensajeExito = false, 3000);
