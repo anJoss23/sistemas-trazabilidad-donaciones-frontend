@@ -8,7 +8,9 @@ import { AuthService } from './services/auth.service';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule],
-  templateUrl: './app.html'
+  // CORRECCIÓN DE RUTAS EXACTAS SEGÚN TUS NOMBRES DE ARCHIVO:
+  templateUrl: './app.html',
+  styleUrl: './app.css'
 })
 export class App {
   showMenu: boolean = false;

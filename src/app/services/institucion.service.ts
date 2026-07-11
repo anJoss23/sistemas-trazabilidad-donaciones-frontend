@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class InstitucionService {
-  private url = 'http://localhost:8080/api/instituciones';
+  private url = 'https://localhost:8080/api/instituciones';
   constructor(private http: HttpClient) {}
 
   listar(): Observable<any> { return this.http.get(this.url); }

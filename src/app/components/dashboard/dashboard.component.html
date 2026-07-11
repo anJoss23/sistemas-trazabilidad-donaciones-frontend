@@ -1,43 +1,53 @@
 <div class="container mt-4">
-  <h2 class="mb-4 text-primary fw-bold">Panel Principal de EcoDigital</h2>
+  <h2 class="mb-4 fw-bold" style="color: var(--eco-secondary, #334155)">
+    Panel Principal de EcoDigital
+  </h2>
 
   <div *ngIf="rolUsuario !== 'TECNICO' && rolUsuario !== 'TÉCNICO'">
     <p class="text-muted mb-4">Resumen en tiempo real de la base de datos.</p>
 
     <div class="row">
       <div class="col-md-3 mb-4">
-        <div class="card text-white bg-primary shadow rounded-4 border-0">
+        <div
+          class="card bg-white shadow-sm rounded-4 border-0 border-start border-4 border-primary h-100"
+        >
           <div class="card-body">
-            <h6 class="card-title text-uppercase fw-bold">Total Equipos</h6>
-            <h1 class="display-5 fw-bold">{{ totalEquipos }}</h1>
-            <p class="card-text small m-0">Registrados en inventario</p>
+            <h6 class="card-title text-muted text-uppercase fw-bold mb-2">Total Equipos</h6>
+            <h1 class="display-5 fw-bold text-primary mb-1">{{ totalEquipos }}</h1>
+            <p class="card-text small text-muted m-0">Registrados en inventario</p>
           </div>
         </div>
       </div>
       <div class="col-md-3 mb-4">
-        <div class="card text-white bg-success shadow rounded-4 border-0">
+        <div
+          class="card bg-white shadow-sm rounded-4 border-0 border-start border-4 border-success h-100"
+        >
           <div class="card-body">
-            <h6 class="card-title text-uppercase fw-bold">Donaciones</h6>
-            <h1 class="display-5 fw-bold">{{ totalDespachos }}</h1>
-            <p class="card-text small m-0">Guías de despacho emitidas</p>
+            <h6 class="card-title text-muted text-uppercase fw-bold mb-2">Donaciones</h6>
+            <h1 class="display-5 fw-bold text-success mb-1">{{ totalDespachos }}</h1>
+            <p class="card-text small text-muted m-0">Guías de despacho emitidas</p>
           </div>
         </div>
       </div>
       <div class="col-md-3 mb-4">
-        <div class="card text-dark bg-warning shadow rounded-4 border-0">
+        <div
+          class="card bg-white shadow-sm rounded-4 border-0 border-start border-4 border-warning h-100"
+        >
           <div class="card-body">
-            <h6 class="card-title text-uppercase fw-bold">Colegios</h6>
-            <h1 class="display-5 fw-bold">{{ totalInstituciones }}</h1>
-            <p class="card-text small m-0">Instituciones beneficiadas</p>
+            <h6 class="card-title text-muted text-uppercase fw-bold mb-2">Colegios</h6>
+            <h1 class="display-5 fw-bold text-warning mb-1">{{ totalInstituciones }}</h1>
+            <p class="card-text small text-muted m-0">Instituciones beneficiadas</p>
           </div>
         </div>
       </div>
       <div class="col-md-3 mb-4">
-        <div class="card text-white bg-info shadow rounded-4 border-0">
+        <div
+          class="card bg-white shadow-sm rounded-4 border-0 border-start border-4 border-info h-100"
+        >
           <div class="card-body">
-            <h6 class="card-title text-uppercase fw-bold">Personal</h6>
-            <h1 class="display-5 fw-bold">{{ totalUsuarios }}</h1>
-            <p class="card-text small m-0">Técnicos y administradores</p>
+            <h6 class="card-title text-muted text-uppercase fw-bold mb-2">Personal</h6>
+            <h1 class="display-5 fw-bold text-info mb-1">{{ totalUsuarios }}</h1>
+            <p class="card-text small text-muted m-0">Técnicos y administradores</p>
           </div>
         </div>
       </div>
@@ -46,7 +56,7 @@
     <div class="row mt-3">
       <div class="col-md-4 mb-4">
         <div class="card shadow-sm border-0 rounded-4 h-100">
-          <div class="card-header bg-white text-dark fw-bold border-bottom p-3">
+          <div class="card-header bg-transparent text-dark fw-bold border-bottom p-3">
             Distribución por Estado
           </div>
           <div
@@ -59,32 +69,36 @@
       </div>
       <div class="col-md-8 mb-4">
         <div class="card shadow-sm border-0 rounded-4 h-100">
-          <div class="card-header bg-white text-dark fw-bold border-bottom p-3">
+          <div class="card-header bg-transparent text-dark fw-bold border-bottom p-3">
             Últimos 5 Equipos Ingresados
           </div>
           <div class="card-body p-0">
-            <table class="table table-hover m-0">
-              <thead class="table-light">
+            <table class="table table-borderless table-hover m-0">
+              <thead style="background-color: #f8fafc; border-bottom: 2px solid #e2e8f0">
                 <tr>
-                  <th class="ps-3">N° Serie</th>
-                  <th>Marca / Modelo</th>
-                  <th>Estado Actual</th>
-                  <th>Fecha Recepción</th>
+                  <th class="ps-4 py-3 text-muted">N° Serie</th>
+                  <th class="py-3 text-muted">Marca / Modelo</th>
+                  <th class="py-3 text-muted">Estado Actual</th>
+                  <th class="py-3 text-muted">Fecha Recepción</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let eq of equiposRecientes">
-                  <td class="ps-3 fw-bold">{{ eq.numeroSerie }}</td>
-                  <td>{{ eq.marca }} {{ eq.modelo }}</td>
-                  <td>
-                    <span class="badge bg-primary">{{
-                      eq.estadoActual?.nombreEstado || 'Sin Estado'
-                    }}</span>
+                <tr *ngFor="let eq of equiposRecientes" style="border-bottom: 1px solid #f1f5f9">
+                  <td class="ps-4 fw-semibold text-dark align-middle">{{ eq.numeroSerie }}</td>
+                  <td class="align-middle">{{ eq.marca }} {{ eq.modelo }}</td>
+                  <td class="align-middle">
+                    <span
+                      class="badge bg-light text-primary border border-primary-subtle px-2 py-1 rounded-pill"
+                    >
+                      {{ eq.estadoActual?.nombreEstado || 'Sin Estado' }}
+                    </span>
                   </td>
-                  <td>{{ eq.fechaRecepcion | date: 'dd/MM/yyyy' }}</td>
+                  <td class="align-middle text-muted">
+                    {{ eq.fechaRecepcion | date: 'dd/MM/yyyy' }}
+                  </td>
                 </tr>
                 <tr *ngIf="equiposRecientes.length === 0">
-                  <td colspan="4" class="text-center py-4 text-muted">
+                  <td colspan="4" class="text-center py-5 text-muted">
                     Aún no hay equipos registrados.
                   </td>
                 </tr>
@@ -101,31 +115,37 @@
 
     <div class="row">
       <div class="col-md-4 mb-4">
-        <div class="card text-white bg-primary shadow rounded-4 border-0">
+        <div
+          class="card bg-white shadow-sm rounded-4 border-0 border-start border-4 border-primary h-100"
+        >
           <div class="card-body">
-            <h6 class="card-title text-uppercase fw-bold">Mis Equipos Asignados</h6>
-            <h1 class="display-5 fw-bold">{{ misEquiposAsignados }}</h1>
-            <p class="card-text small m-0">Equipos bajo mi responsabilidad</p>
+            <h6 class="card-title text-muted text-uppercase fw-bold mb-2">Mis Equipos Asignados</h6>
+            <h1 class="display-5 fw-bold text-primary mb-1">{{ misEquiposAsignados }}</h1>
+            <p class="card-text small text-muted m-0">Equipos bajo mi responsabilidad</p>
           </div>
         </div>
       </div>
 
       <div class="col-md-4 mb-4">
-        <div class="card text-white bg-success shadow rounded-4 border-0">
+        <div
+          class="card bg-white shadow-sm rounded-4 border-0 border-start border-4 border-success h-100"
+        >
           <div class="card-body">
-            <h6 class="card-title text-uppercase fw-bold">Operativos / Donados</h6>
-            <h1 class="display-5 fw-bold">{{ misEquiposReparados }}</h1>
-            <p class="card-text small m-0">Equipos que ya reparé o despaché</p>
+            <h6 class="card-title text-muted text-uppercase fw-bold mb-2">Operativos / Donados</h6>
+            <h1 class="display-5 fw-bold text-success mb-1">{{ misEquiposReparados }}</h1>
+            <p class="card-text small text-muted m-0">Equipos que ya reparé o despaché</p>
           </div>
         </div>
       </div>
 
       <div class="col-md-4 mb-4">
-        <div class="card text-dark bg-warning shadow rounded-4 border-0">
+        <div
+          class="card bg-white shadow-sm rounded-4 border-0 border-start border-4 border-warning h-100"
+        >
           <div class="card-body">
-            <h6 class="card-title text-uppercase fw-bold">Mis Revisiones</h6>
-            <h1 class="display-5 fw-bold">{{ miHistorial.length }}</h1>
-            <p class="card-text small m-0">Registros en el historial</p>
+            <h6 class="card-title text-muted text-uppercase fw-bold mb-2">Mis Revisiones</h6>
+            <h1 class="display-5 fw-bold text-warning mb-1">{{ miHistorial.length }}</h1>
+            <p class="card-text small text-muted m-0">Registros en el historial</p>
           </div>
         </div>
       </div>
@@ -134,38 +154,42 @@
     <div class="row mt-3">
       <div class="col-md-12 mb-4">
         <div class="card shadow-sm border-0 rounded-4 h-100">
-          <div class="card-header bg-white text-dark fw-bold border-bottom p-3">
+          <div class="card-header bg-transparent text-dark fw-bold border-bottom p-3">
             Mi Trazabilidad - Últimos Cambios de Estado Registrados
           </div>
           <div class="card-body p-0">
-            <table class="table table-hover m-0">
-              <thead class="table-light">
+            <table class="table table-borderless table-hover m-0">
+              <thead style="background-color: #f8fafc; border-bottom: 2px solid #e2e8f0">
                 <tr>
-                  <th class="ps-3">N° Serie Equipo</th>
-                  <th>Nuevo Estado</th>
-                  <th>Fecha de Revisión</th>
-                  <th>Observaciones</th>
+                  <th class="ps-4 py-3 text-muted">N° Serie Equipo</th>
+                  <th class="py-3 text-muted">Nuevo Estado</th>
+                  <th class="py-3 text-muted">Fecha de Revisión</th>
+                  <th class="py-3 text-muted">Observaciones</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let h of miHistorial">
-                  <td class="ps-3 fw-bold">{{ h.equipo?.numeroSerie || 'N/A' }}</td>
-
-                  <td>
-                    <span class="badge bg-primary">
+                <tr *ngFor="let h of miHistorial" style="border-bottom: 1px solid #f1f5f9">
+                  <td class="ps-4 fw-semibold text-dark align-middle">
+                    {{ h.equipo?.numeroSerie || 'N/A' }}
+                  </td>
+                  <td class="align-middle">
+                    <span
+                      class="badge bg-light text-primary border border-primary-subtle px-2 py-1 rounded-pill"
+                    >
                       {{ h.estadoNuevo?.nombreEstado || 'Actualizado' }}
                     </span>
                   </td>
-
-                  <td>{{ h.fechaCambio | date: 'dd/MM/yyyy' }}</td>
-
-                  <td class="text-truncate" style="max-width: 250px">
+                  <td class="align-middle text-muted">{{ h.fechaCambio | date: 'dd/MM/yyyy' }}</td>
+                  <td
+                    class="align-middle text-truncate"
+                    style="max-width: 250px"
+                    title="{{ h.observaciones }}"
+                  >
                     {{ h.observaciones || 'Sin observaciones' }}
                   </td>
                 </tr>
-
                 <tr *ngIf="miHistorial.length === 0">
-                  <td colspan="4" class="text-center py-4 text-muted">
+                  <td colspan="4" class="text-center py-5 text-muted">
                     Aún no tienes registros de trazabilidad en tu historial.
                   </td>
                 </tr>

@@ -59,13 +59,13 @@ export class ReportesComponent implements OnInit {
   }
 
   cargarDatos() {
-    this.http.get<any[]>('http://localhost:8080/api/equipos').subscribe(data => {
+    this.http.get<any[]>('https://localhost:8080/api/equipos').subscribe(data => {
       this.equipos = data; this.equiposFiltrados = data;
     });
-    this.http.get<any[]>('http://localhost:8080/api/despachos').subscribe(data => {
+    this.http.get<any[]>('https://localhost:8080/api/despachos').subscribe(data => {
       this.despachos = data; this.despachosFiltrados = data;
     });
-    this.http.get<any[]>('http://localhost:8080/api/instituciones').subscribe(data => {
+    this.http.get<any[]>('https://localhost:8080/api/instituciones').subscribe(data => {
       this.instituciones = data; this.institucionesFiltradas = data;
     });
 
@@ -76,12 +76,12 @@ export class ReportesComponent implements OnInit {
       this.cdr.detectChanges();
     });
 
-    this.http.get<any[]>('http://localhost:8080/api/estados-equipo').subscribe(data => this.listaEstados = data);
-    this.http.get<any[]>('http://localhost:8080/api/tipos-equipo').subscribe(data => this.listaTipos = data);
-    this.http.get<any[]>('http://localhost:8080/api/donantes').subscribe(data => this.listaDonantes = data);
+    this.http.get<any[]>('https://localhost:8080/api/estados-equipo').subscribe(data => this.listaEstados = data);
+    this.http.get<any[]>('https://localhost:8080/api/tipos-equipo').subscribe(data => this.listaTipos = data);
+    this.http.get<any[]>('https://localhost:8080/api/donantes').subscribe(data => this.listaDonantes = data);
 
     // MODIFICADO: Filtramos la lista para que el select solo muestre Técnicos
-    this.http.get<any[]>('http://localhost:8080/api/usuarios').subscribe(data => {
+    this.http.get<any[]>('https://localhost:8080/api/usuarios').subscribe(data => {
       this.listaUsuarios = data.filter(u => {
         const nombreRol = (u.rol?.nombreRol || u.rol?.nombre || '').toUpperCase();
         return nombreRol === 'TECNICO' || nombreRol === 'TÉCNICO';

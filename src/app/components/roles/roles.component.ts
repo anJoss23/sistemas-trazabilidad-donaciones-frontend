@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule , NgForm} from '@angular/forms';
 import { RolService } from '../../services/rol.service';
 
 @Component({
@@ -27,13 +27,20 @@ export class RolesComponent implements OnInit {
     });
   }
 
-  guardar() {
+ // AHORA RECIBE EL NgForm
+  guardar(form: NgForm) {
     const esEdicion = !!this.rol.rolId;
 
     this.service.guardar(this.rol).subscribe({
       next: () => {
         this.mensajeAccion = esEdicion ? 'Rol actualizado correctamente' : 'Rol registrado correctamente';
         this.cargar();
+
+        // Resetea el historial visual de campos rojos
+        if (form) {
+          form.resetForm();
+        }
+
         this.limpiar();
         this.mensajeExito = true;
         this.mensajeError = false;
@@ -48,7 +55,13 @@ export class RolesComponent implements OnInit {
     });
   }
 
-  limpiar() { this.rol = { rolId: null, nombreRol: '' }; }
+  // RECIBE FORM OPCIONAL PARA EL BOTÓN CANCELAR
+  limpiar(form?: NgForm) {
+    if (form) {
+      form.resetForm();
+    }
+    this.rol = { rolId: null, nombreRol: '' };
+  }
 
   editar(r: any) { this.rol = { ...r }; }
 

@@ -1,48 +1,118 @@
 <div class="container mt-4">
   <div class="card p-4 shadow-sm">
     <h3 class="mb-3">Gestión de Usuarios</h3>
-    <form (ngSubmit)="guardar()">
+
+    <form (ngSubmit)="guardar(usuarioForm)" #usuarioForm="ngForm">
       <div class="row">
         <div class="col-md-6 mb-3">
-          <label class="fw-bold">Nombre</label>
-          <input [(ngModel)]="usuario.nombre" name="nombre" class="form-control" required />
+          <label class="fw-bold">Nombre <span class="text-danger">*</span></label>
+          <input
+            [(ngModel)]="usuario.nombre"
+            name="nombre"
+            class="form-control"
+            required
+            #nombreInput="ngModel"
+            [ngClass]="{
+              'is-invalid': nombreInput.invalid && (nombreInput.dirty || nombreInput.touched),
+            }"
+          />
+          <div
+            *ngIf="nombreInput.invalid && (nombreInput.dirty || nombreInput.touched)"
+            class="invalid-feedback"
+          >
+            El nombre es obligatorio.
+          </div>
         </div>
+
         <div class="col-md-6 mb-3">
-          <label class="fw-bold">Correo</label>
-          <input [(ngModel)]="usuario.correo" name="correo" class="form-control" required />
+          <label class="fw-bold">Correo <span class="text-danger">*</span></label>
+          <input
+            type="email"
+            [(ngModel)]="usuario.correo"
+            name="correo"
+            class="form-control"
+            required
+            email
+            #correoInput="ngModel"
+            [ngClass]="{
+              'is-invalid': correoInput.invalid && (correoInput.dirty || correoInput.touched),
+            }"
+          />
+          <div
+            *ngIf="correoInput.invalid && (correoInput.dirty || correoInput.touched)"
+            class="invalid-feedback"
+          >
+            <span *ngIf="correoInput.errors?.['required']">El correo es obligatorio.</span>
+            <span *ngIf="correoInput.errors?.['email']">Ingrese un formato de correo válido.</span>
+          </div>
         </div>
+
         <div class="col-md-6 mb-3">
-          <label class="fw-bold">Contraseña</label>
+          <label class="fw-bold"
+            >Contraseña <span *ngIf="!usuario.usuarioId" class="text-danger">*</span></label
+          >
           <input
             type="password"
             [(ngModel)]="usuario.contrasena"
             name="pass"
             class="form-control"
+            [required]="!usuario.usuarioId"
+            minlength="6"
+            #passInput="ngModel"
+            [ngClass]="{
+              'is-invalid': passInput.invalid && (passInput.dirty || passInput.touched),
+            }"
           />
+          <div
+            *ngIf="passInput.invalid && (passInput.dirty || passInput.touched)"
+            class="invalid-feedback"
+          >
+            <span *ngIf="passInput.errors?.['required']">La contraseña es obligatoria.</span>
+            <span *ngIf="passInput.errors?.['minlength']">Debe tener al menos 6 caracteres.</span>
+          </div>
         </div>
 
         <div class="col-md-6 mb-3">
-          <label class="fw-bold">Rol</label>
-          <select [(ngModel)]="usuario.rol.rolId" name="rol" class="form-control" required>
+          <label class="fw-bold">Rol <span class="text-danger">*</span></label>
+          <select
+            [(ngModel)]="usuario.rol.rolId"
+            name="rol"
+            class="form-control"
+            required
+            #rolInput="ngModel"
+            [ngClass]="{ 'is-invalid': rolInput.invalid && (rolInput.dirty || rolInput.touched) }"
+          >
             <option [ngValue]="null">-- Seleccione el Rol --</option>
             <option *ngFor="let r of listaRoles" [value]="r.rolId">
               {{ r.nombreRol }}
             </option>
           </select>
+          <div
+            *ngIf="rolInput.invalid && (rolInput.dirty || rolInput.touched)"
+            class="invalid-feedback"
+          >
+            Debe seleccionar el rol.
+          </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary mt-3">Guardar Usuario</button>
+
+      <button type="submit" class="btn btn-primary mt-3" [disabled]="usuarioForm.invalid">
+        Guardar Usuario
+      </button>
+
       <div *ngIf="mensajeExito" class="alert alert-success mt-3" role="alert">
         {{ mensajeAccion }}
       </div>
+
       <div *ngIf="mensajeError" class="alert alert-danger mt-3" role="alert">
         Ocurrió un error al guardar el usuario. Verifique el correo y rol.
       </div>
+
       <button
         type="button"
         class="btn btn-secondary mt-3 ms-2"
-        (click)="limpiar()"
-        *ngIf="usuario.usuarioId"
+        (click)="limpiar(usuarioForm)"
+        *ngIf="usuario.usuarioId || usuarioForm.dirty"
       >
         Cancelar
       </button>

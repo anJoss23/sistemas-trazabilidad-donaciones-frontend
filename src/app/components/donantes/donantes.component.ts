@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { DonanteService } from '../../services/donante.service';
 
 @Component({
@@ -28,13 +28,20 @@ export class DonantesComponent implements OnInit {
     });
   }
 
-  guardar() {
+ // AHORA RECIBE EL NgForm
+  guardar(form: NgForm) {
     const esEdicion = !!this.donante.donanteId;
 
     this.service.guardar(this.donante).subscribe({
       next: () => {
         this.mensajeAccion = esEdicion ? 'Donante actualizado correctamente' : 'Donante registrado correctamente';
         this.cargar();
+
+        // Resetea el historial visual de campos rojos
+        if (form) {
+          form.resetForm();
+        }
+
         this.limpiar();
         this.mensajeExito = true;
         this.mensajeError = false;
@@ -49,7 +56,13 @@ export class DonantesComponent implements OnInit {
     });
   }
 
-  limpiar() { this.donante = { donanteId: null, razonSocial: '', rucDni: '', contactoNombre: '', correo: '', telefono: '', direccion: '' }; }
+  // RECIBE FORM OPCIONAL PARA EL BOTÓN CANCELAR
+  limpiar(form?: NgForm) {
+    if (form) {
+      form.resetForm();
+    }
+    this.donante = { donanteId: null, razonSocial: '', rucDni: '', contactoNombre: '', correo: '', telefono: '', direccion: '' };
+  }
   eliminar(id: number) { if(confirm('¿Eliminar?')) this.service.eliminar(id).subscribe(() => this.cargar()); }
   editar(d: any) { this.donante = { ...d }; }
 }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { EquipoService } from '../../services/equipo.service';
+import { NgForm } from '@angular/forms'; // <--- AGREGAR ESTA IMPORTACIÓN
 
 @Component({
   selector: 'app-equipos',
@@ -52,17 +53,18 @@ export class EquiposComponent implements OnInit {
   }
 
   cargarCatalogos() {
-    this.http.get<any[]>('http://localhost:8080/api/tipos-equipo').subscribe(data => { this.listaTipos = data; this.cdr.detectChanges(); });
-    this.http.get<any[]>('http://localhost:8080/api/estados-equipo').subscribe(data => { this.listaEstados = data; this.cdr.detectChanges(); });
-    this.http.get<any[]>('http://localhost:8080/api/donantes').subscribe(data => { this.listaDonantes = data; this.cdr.detectChanges(); });
+    this.http.get<any[]>('https://localhost:8080/api/tipos-equipo').subscribe(data => { this.listaTipos = data; this.cdr.detectChanges(); });
+    this.http.get<any[]>('https://localhost:8080/api/estados-equipo').subscribe(data => { this.listaEstados = data; this.cdr.detectChanges(); });
+    this.http.get<any[]>('https://localhost:8080/api/donantes').subscribe(data => { this.listaDonantes = data; this.cdr.detectChanges(); });
 
     // CAMBIO AQUÍ: Ahora pedimos específicamente a los "tecnicos"
-    this.http.get<any[]>('http://localhost:8080/api/usuarios/tecnicos').subscribe(data => {
+    this.http.get<any[]>('https://localhost:8080/api/usuarios/tecnicos').subscribe(data => {
       this.listaUsuarios = data;
       this.cdr.detectChanges();
     });}
-
-  registrar() {
+//MODIFICACIONES PARA LAS VALIDACIONES EN EL FRONTEND.
+  // 1. Recibimos el form como parámetro de la variable creada en el .html
+  registrar(form: NgForm) {
     const esEdicion = !!this.nuevoEquipo.equipoId;
     const operacion = esEdicion ? this.equipoService.actualizarEquipo(this.nuevoEquipo) : this.equipoService.registrarEquipo(this.nuevoEquipo);
 
@@ -70,7 +72,15 @@ export class EquiposComponent implements OnInit {
       next: () => {
         this.mensajeAccion = esEdicion ? 'Equipo editado correctamente' : 'Equipo registrado correctamente';
         this.mensajeExito = true;
+
+        // 2. Reseteamos el estado visual de las advertencias (se borra los bordes rojos y el historial de "tocado")
+        if (form) {
+          form.resetForm();
+        }
+
+        // 3. Volvemos a colocar tu estructura de datos limpia para evitar errores.
         this.limpiarFormulario();
+
         this.cargarLista();
         this.cdr.detectChanges();
         setTimeout(() => this.mensajeExito = false, 3000);

@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm  } from '@angular/forms';
 import { UsuarioService } from '../../services/usuario.service';
 import { HttpClient } from '@angular/common/http'; // IMPORTANTE: Agregamos HttpClient
 
@@ -44,19 +44,24 @@ export class UsuariosComponent implements OnInit {
 
   // FUNCIÓN PARA TRAER ROLES DE MySQL
   cargarRoles() {
-    this.http.get<any[]>('http://localhost:8080/api/roles').subscribe(data => {
+    this.http.get<any[]>('https://localhost:8080/api/roles').subscribe(data => {
       this.listaRoles = data;
       this.cdr.detectChanges();
     });
   }
 
-  guardar() {
+  // 1. AHORA RECIBE EL NgForm
+  guardar(form: NgForm) {
     const esEdicion = !!this.usuario.usuarioId;
     this.usuarioService.guardar(this.usuario).subscribe({
       next: () => {
         this.mensajeAccion = esEdicion ? 'Usuario actualizado correctamente' : 'Usuario registrado correctamente';
         this.cargar();
+
+        // Limpiar formulario y su estado visual (bordes rojos)
+        if (form) form.resetForm();
         this.limpiar();
+
         this.mensajeExito = true;
         this.mensajeError = false;
         setTimeout(() => this.mensajeExito = false, 3000);
@@ -70,7 +75,9 @@ export class UsuariosComponent implements OnInit {
     });
   }
 
-  limpiar() {
+  limpiar(form?: NgForm) {
+    if (form) form.resetForm();
+
     this.usuario = {
       usuarioId: null,
       nombre: '',
