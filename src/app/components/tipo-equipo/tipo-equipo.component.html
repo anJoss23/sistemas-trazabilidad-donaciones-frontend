@@ -1,20 +1,49 @@
 <div class="container mt-4">
   <div class="card p-4 shadow-sm mb-4">
     <h3>Gestión de Tipos de Equipo</h3>
-    <form (ngSubmit)="guardar()">
+
+    <form (ngSubmit)="guardar(tipoForm)" #tipoForm="ngForm">
       <div class="row">
         <div class="col-md-9 mb-3">
-          <label>Nombre del Tipo (Ej. Laptop, Monitor, Impresora)</label>
+          <label
+            >Nombre del Tipo (Ej. Laptop, Monitor, Impresora)
+            <span class="text-danger">*</span></label
+          >
           <input
             [(ngModel)]="tipoEquipo.nombreTipo"
             name="nombreTipo"
             class="form-control"
             required
+            minlength="3"
+            #nombreInput="ngModel"
+            [ngClass]="{
+              'is-invalid': nombreInput.invalid && (nombreInput.dirty || nombreInput.touched),
+            }"
           />
+          <div
+            *ngIf="nombreInput.invalid && (nombreInput.dirty || nombreInput.touched)"
+            class="invalid-feedback"
+          >
+            <span *ngIf="nombreInput.errors?.['required']">El nombre del tipo es obligatorio.</span>
+            <span *ngIf="nombreInput.errors?.['minlength']">Debe tener al menos 3 caracteres.</span>
+          </div>
         </div>
-        <div class="col-md-3 mb-3 d-flex align-items-end">
-          <button type="submit" class="btn btn-info w-100">Guardar</button>
+
+        <div class="col-md-3 mb-3 d-flex align-items-end gap-2">
+          <button type="submit" class="btn btn-info w-100 text-white" [disabled]="tipoForm.invalid">
+            Guardar
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-secondary w-100"
+            (click)="limpiar(tipoForm)"
+            *ngIf="tipoEquipo.tipoId || tipoForm.dirty"
+          >
+            Cancelar
+          </button>
         </div>
+
         <div *ngIf="mensajeExito" class="alert alert-success mt-3" role="alert">
           {{ mensajeAccion }}
         </div>

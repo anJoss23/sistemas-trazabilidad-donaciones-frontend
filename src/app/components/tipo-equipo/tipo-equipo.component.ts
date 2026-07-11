@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { TipoEquipoService } from '../../services/tipo-equipo.service';
 
 @Component({
@@ -29,13 +29,20 @@ export class TipoEquipoComponent implements OnInit {
     });
   }
 
-  guardar() {
+  // AHORA RECIBE EL NgForm
+  guardar(form: NgForm) {
     const esEdicion = !!this.tipoEquipo.tipoId;
 
     this.service.guardar(this.tipoEquipo).subscribe({
       next: () => {
         this.mensajeAccion = esEdicion ? 'Tipo de equipo actualizado' : 'Tipo de equipo registrado';
         this.cargar();
+
+        // Resetea el historial visual de campos rojos
+        if (form) {
+          form.resetForm();
+        }
+
         this.limpiar();
         this.mensajeExito = true;
         this.mensajeError = false;
@@ -50,7 +57,11 @@ export class TipoEquipoComponent implements OnInit {
     });
   }
 
-  limpiar() {
+  // RECIBE FORM OPCIONAL PARA EL BOTÓN CANCELAR
+  limpiar(form?: NgForm) {
+    if (form) {
+      form.resetForm();
+    }
     this.tipoEquipo = { tipoId: null, nombreTipo: '' };
   }
 

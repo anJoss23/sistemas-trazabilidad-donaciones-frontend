@@ -3,6 +3,7 @@
 
   <form (ngSubmit)="guardar(rolForm)" #rolForm="ngForm" class="mb-4">
     <div class="position-relative">
+      <label class="fw-bold">Nombre del ROL del usuario <span class="text-danger">*</span></label>
       <input
         [(ngModel)]="rol.nombreRol"
         name="nombre"
