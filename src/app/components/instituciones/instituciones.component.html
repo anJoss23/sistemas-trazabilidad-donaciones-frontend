@@ -1,29 +1,131 @@
 <div class="container mt-4">
   <div class="card p-4 shadow-sm mb-4">
     <h3>Gestión de Instituciones Beneficiarias</h3>
-    <form (ngSubmit)="guardar()">
+
+    <form (ngSubmit)="guardar(instForm)" #instForm="ngForm">
       <div class="row">
         <div class="col-md-6 mb-3">
-          <label>Colegio</label
-          ><input [(ngModel)]="inst.nombreColegio" name="nom" class="form-control" required />
+          <label>Colegio <span class="text-danger">*</span></label>
+          <input
+            [(ngModel)]="inst.nombreColegio"
+            name="nom"
+            class="form-control"
+            required
+            minlength="5"
+            #nomInput="ngModel"
+            [ngClass]="{ 'is-invalid': nomInput.invalid && (nomInput.dirty || nomInput.touched) }"
+          />
+          <div
+            *ngIf="nomInput.invalid && (nomInput.dirty || nomInput.touched)"
+            class="invalid-feedback"
+          >
+            <span *ngIf="nomInput.errors?.['required']">El nombre del colegio es obligatorio.</span>
+            <span *ngIf="nomInput.errors?.['minlength']">Debe tener al menos 5 caracteres.</span>
+          </div>
         </div>
+
         <div class="col-md-6 mb-3">
-          <label>Director</label
-          ><input [(ngModel)]="inst.director" name="dir" class="form-control" />
+          <label>Director <span class="text-danger">*</span></label>
+          <input
+            [(ngModel)]="inst.director"
+            name="dir"
+            class="form-control"
+            required
+            minlength="3"
+            #dirInput="ngModel"
+            [ngClass]="{ 'is-invalid': dirInput.invalid && (dirInput.dirty || dirInput.touched) }"
+          />
+          <div
+            *ngIf="dirInput.invalid && (dirInput.dirty || dirInput.touched)"
+            class="invalid-feedback"
+          >
+            <span *ngIf="dirInput.errors?.['required']"
+              >El nombre del director es obligatorio.</span
+            >
+            <span *ngIf="dirInput.errors?.['minlength']">Debe tener al menos 3 caracteres.</span>
+          </div>
         </div>
+
         <div class="col-md-6 mb-3">
-          <label>Dirección</label
-          ><input [(ngModel)]="inst.direccion" name="direc" class="form-control" />
+          <label>Dirección <span class="text-danger">*</span></label>
+          <input
+            [(ngModel)]="inst.direccion"
+            name="direc"
+            class="form-control"
+            required
+            minlength="5"
+            #direcInput="ngModel"
+            [ngClass]="{
+              'is-invalid': direcInput.invalid && (direcInput.dirty || direcInput.touched),
+            }"
+          />
+          <div
+            *ngIf="direcInput.invalid && (direcInput.dirty || direcInput.touched)"
+            class="invalid-feedback"
+          >
+            <span *ngIf="direcInput.errors?.['required']">La dirección es obligatoria.</span>
+            <span *ngIf="direcInput.errors?.['minlength']"
+              >Ingrese una dirección más detallada.</span
+            >
+          </div>
         </div>
+
         <div class="col-md-6 mb-3">
-          <label>UGEL</label><input [(ngModel)]="inst.ugel" name="ugel" class="form-control" />
+          <label>UGEL</label>
+          <input
+            [(ngModel)]="inst.ugel"
+            name="ugel"
+            class="form-control"
+            minlength="2"
+            #ugelInput="ngModel"
+            [ngClass]="{
+              'is-invalid': ugelInput.invalid && (ugelInput.dirty || ugelInput.touched),
+            }"
+          />
+          <div
+            *ngIf="ugelInput.invalid && (ugelInput.dirty || ugelInput.touched)"
+            class="invalid-feedback"
+          >
+            Si especifica UGEL, ingrese un valor válido.
+          </div>
         </div>
+
         <div class="col-md-6 mb-3">
-          <label>Teléfono</label
-          ><input [(ngModel)]="inst.telefonoContacto" name="tel" class="form-control" />
+          <label>Teléfono <span class="text-danger">*</span></label>
+          <input
+            [(ngModel)]="inst.telefonoContacto"
+            name="tel"
+            class="form-control"
+            required
+            pattern="^[0-9+\- ]{7,15}$"
+            #telInput="ngModel"
+            [ngClass]="{ 'is-invalid': telInput.invalid && (telInput.dirty || telInput.touched) }"
+          />
+          <div
+            *ngIf="telInput.invalid && (telInput.dirty || telInput.touched)"
+            class="invalid-feedback"
+          >
+            <span *ngIf="telInput.errors?.['required']"
+              >El teléfono de contacto es obligatorio.</span
+            >
+            <span *ngIf="telInput.errors?.['pattern']"
+              >Ingrese un número válido (mínimo 7 dígitos, se acepta +).</span
+            >
+          </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-success">Guardar</button>
+
+      <button type="submit" class="btn btn-success" [disabled]="instForm.invalid">Guardar</button>
+
+      <button
+        type="button"
+        class="btn btn-secondary ms-2"
+        (click)="limpiar(instForm)"
+        *ngIf="inst.institucionId || instForm.dirty"
+      >
+        Cancelar
+      </button>
+
       <div *ngIf="mensajeExito" class="alert alert-success mt-3" role="alert">
         {{ mensajeAccion }}
       </div>
@@ -32,6 +134,7 @@
       </div>
     </form>
   </div>
+
   <table class="table table-striped">
     <thead>
       <tr>
@@ -45,7 +148,7 @@
         <td>{{ i.nombreColegio }}</td>
         <td>{{ i.director }}</td>
         <td>
-          <button (click)="editar(i)" class="btn btn-warning btn-sm">Editar</button>
+          <button (click)="editar(i)" class="btn btn-warning btn-sm me-1">Editar</button>
           <button (click)="eliminar(i.institucionId)" class="btn btn-danger btn-sm">
             Eliminar
           </button>

@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { EstadoEquipoService } from '../../services/estado-equipo.service';
 
 @Component({
@@ -34,13 +34,20 @@ export class EstadosEquipoComponent implements OnInit {
     });
   }
 
-  guardar() {
-   const esEdicion = !!this.estado.estadoId;
+  // AHORA RECIBE EL NgForm
+  guardar(form: NgForm) {
+    const esEdicion = !!this.estado.estadoId;
 
     this.service.guardar(this.estado).subscribe({
       next: () => {
         this.mensajeAccion = esEdicion ? 'Estado actualizado correctamente' : 'Estado registrado correctamente';
         this.cargar();
+
+        // Resetea el historial visual de campos rojos
+        if (form) {
+          form.resetForm();
+        }
+
         this.limpiar();
         this.mensajeExito = true;
         this.mensajeError = false;
@@ -55,7 +62,13 @@ export class EstadosEquipoComponent implements OnInit {
     });
   }
 
-  limpiar() { this.estado = { estadoId: null, nombreEstado: '' }; }
+  // RECIBE FORM OPCIONAL PARA EL BOTÓN CANCELAR
+  limpiar(form?: NgForm) {
+    if (form) {
+      form.resetForm();
+    }
+    this.estado = { estadoId: null, nombreEstado: '' };
+  }
 
   editar(e: any) { this.estado = { ...e }; }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { HistorialService } from '../../services/historial.service';
 
@@ -73,13 +73,20 @@ export class HistorialComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  guardar() {
+  // AHORA RECIBE EL NgForm
+  guardar(form: NgForm) {
     const esEdicion = !!this.registro.historialId;
 
     this.service.guardar(this.registro).subscribe({
       next: () => {
         this.mensajeAccion = esEdicion ? 'Historial actualizado correctamente' : 'Historial registrado correctamente';
-        this.cargarDatos(); // Aquí usabas cargarDatos() en vez de cargar()
+        this.cargarDatos();
+
+        // borrar el historial de bordes rojos
+        if (form) {
+          form.resetForm();
+        }
+
         this.limpiar();
         this.mensajeExito = true;
         this.mensajeError = false;
@@ -94,8 +101,11 @@ export class HistorialComponent implements OnInit {
       }
     });
   }
-
-  limpiar() {
+  // RECIBE FORM OPCIONAL PARA EL BOTÓN CANCELAR
+  limpiar(form?: NgForm) {
+    if (form) {
+      form.resetForm();
+    }
     this.registro = {
       historialId: null, equipo: { equipoId: null },
       estadoAnterior: { estadoId: null }, estadoNuevo: { estadoId: null },

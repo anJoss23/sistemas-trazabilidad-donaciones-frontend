@@ -1,16 +1,43 @@
 <div class="container mt-4">
   <h3>Gestión de Estados de Equipo</h3>
-  <form (ngSubmit)="guardar()" class="mb-4">
-    <input
-      [(ngModel)]="estado.nombreEstado"
-      name="nombre"
-      class="form-control mb-2"
-      placeholder="Nombre del estado"
-      required
-    />
-    <button type="submit" class="btn btn-primary">Guardar</button>
+
+  <form (ngSubmit)="guardar(estadoForm)" #estadoForm="ngForm" class="mb-4">
+    <div class="mb-3">
+      <label class="fw-bold">Nombre del Estado <span class="text-danger">*</span></label>
+      <input
+        [(ngModel)]="estado.nombreEstado"
+        name="nombre"
+        class="form-control"
+        placeholder="Ej. Operativo, En Reparación..."
+        required
+        minlength="3"
+        #nombreInput="ngModel"
+        [ngClass]="{
+          'is-invalid': nombreInput.invalid && (nombreInput.dirty || nombreInput.touched),
+        }"
+      />
+      <div
+        *ngIf="nombreInput.invalid && (nombreInput.dirty || nombreInput.touched)"
+        class="invalid-feedback"
+      >
+        <span *ngIf="nombreInput.errors?.['required']">El nombre del estado es obligatorio.</span>
+        <span *ngIf="nombreInput.errors?.['minlength']">Debe tener al menos 3 caracteres.</span>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="estadoForm.invalid">Guardar</button>
+
+    <button
+      type="button"
+      class="btn btn-secondary ms-2"
+      (click)="limpiar(estadoForm)"
+      *ngIf="estado.estadoId || estadoForm.dirty"
+    >
+      Cancelar
+    </button>
+
     <div *ngIf="mensajeExito" class="alert alert-success mt-3" role="alert">
-      ¡Estado {{ mensajeAccion }} exitosamente!
+      {{ mensajeAccion }}
     </div>
     <div *ngIf="mensajeError" class="alert alert-danger mt-3" role="alert">
       Ocurrió un error al intentar guardar el registro. Verifica los datos ingresados.

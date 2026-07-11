@@ -1,35 +1,60 @@
 <div class="container mt-4">
   <div class="card p-4 shadow-sm mb-4 border-info">
     <h3 class="text-info mb-3">Registro de Trazabilidad Técnica</h3>
-    <form (ngSubmit)="guardar()">
+
+    <form (ngSubmit)="guardar(historialForm)" #historialForm="ngForm">
       <div class="row">
         <div class="col-md-6 mb-3">
-          <label class="fw-bold text-muted">Equipo (N° Serie)</label>
+          <label class="fw-bold text-muted"
+            >Equipo (N° Serie) <span class="text-danger">*</span></label
+          >
           <select
             [(ngModel)]="registro.equipo.equipoId"
             name="equipoId"
             class="form-select"
             required
             (change)="onEquipoSeleccionado()"
+            #equipoInput="ngModel"
+            [ngClass]="{
+              'is-invalid': equipoInput.invalid && (equipoInput.dirty || equipoInput.touched),
+            }"
           >
             <option [ngValue]="null">-- Seleccione el Equipo --</option>
             <option *ngFor="let e of listaEquipos" [value]="e.equipoId">
               {{ e.numeroSerie }} - {{ e.marca }} {{ e.modelo }}
             </option>
           </select>
+          <div
+            *ngIf="equipoInput.invalid && (equipoInput.dirty || equipoInput.touched)"
+            class="invalid-feedback"
+          >
+            Debe seleccionar un equipo.
+          </div>
         </div>
 
         <div class="col-md-6 mb-3">
-          <label class="fw-bold text-muted">Técnico Responsable</label>
+          <label class="fw-bold text-muted"
+            >Técnico Responsable <span class="text-danger">*</span></label
+          >
           <select
             [(ngModel)]="registro.usuarioResponsable.usuarioId"
             name="usuarioId"
             class="form-select"
             required
+            #userInput="ngModel"
+            [ngClass]="{
+              'is-invalid': userInput.invalid && (userInput.dirty || userInput.touched),
+            }"
           >
             <option [ngValue]="null">-- Seleccione el Técnico --</option>
             <option *ngFor="let u of listaUsuarios" [value]="u.usuarioId">{{ u.nombre }}</option>
           </select>
+          <div
+            *ngIf="userInput.invalid && (userInput.dirty || userInput.touched)"
+            class="invalid-feedback"
+          >
+            Debe asignar un técnico responsable.
+          </div>
         </div>
 
         <div class="col-md-6 mb-3">
@@ -48,18 +73,29 @@
         </div>
 
         <div class="col-md-6 mb-3">
-          <label class="fw-bold text-muted">Estado Nuevo</label>
+          <label class="fw-bold text-muted">Estado Nuevo <span class="text-danger">*</span></label>
           <select
             [(ngModel)]="registro.estadoNuevo.estadoId"
             name="estadoNuevoId"
             class="form-select"
             required
+            #estadoNuevoInput="ngModel"
+            [ngClass]="{
+              'is-invalid':
+                estadoNuevoInput.invalid && (estadoNuevoInput.dirty || estadoNuevoInput.touched),
+            }"
           >
             <option [ngValue]="null">-- Seleccione el Nuevo Estado --</option>
             <option *ngFor="let est of listaEstados" [value]="est.estadoId">
               {{ est.nombreEstado }}
             </option>
           </select>
+          <div
+            *ngIf="estadoNuevoInput.invalid && (estadoNuevoInput.dirty || estadoNuevoInput.touched)"
+            class="invalid-feedback"
+          >
+            Debe seleccionar el nuevo estado del equipo.
+          </div>
         </div>
 
         <div class="col-md-12 mb-3">
@@ -72,7 +108,24 @@
           ></textarea>
         </div>
       </div>
-      <button type="submit" class="btn btn-info text-white fw-bold">Guardar Historial</button>
+
+      <button
+        type="submit"
+        class="btn btn-info text-white fw-bold"
+        [disabled]="historialForm.invalid"
+      >
+        Guardar Historial
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-secondary ms-2 fw-bold"
+        (click)="limpiar(historialForm)"
+        *ngIf="registro.historialId || historialForm.dirty"
+      >
+        Cancelar
+      </button>
+
       <div *ngIf="mensajeExito" class="alert alert-success mt-3" role="alert">
         {{ mensajeAccion }}
       </div>

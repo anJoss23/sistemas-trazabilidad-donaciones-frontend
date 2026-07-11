@@ -1,14 +1,40 @@
 <div class="container mt-4">
   <h3>Gestión de Roles</h3>
-  <form (ngSubmit)="guardar()" class="mb-4">
-    <input
-      [(ngModel)]="rol.nombreRol"
-      name="nombre"
-      class="form-control mb-2"
-      placeholder="Nombre del rol"
-      required
-    />
-    <button type="submit" class="btn btn-primary">Guardar</button>
+
+  <form (ngSubmit)="guardar(rolForm)" #rolForm="ngForm" class="mb-4">
+    <div class="position-relative">
+      <input
+        [(ngModel)]="rol.nombreRol"
+        name="nombre"
+        class="form-control mb-2"
+        placeholder="Nombre del rol *"
+        required
+        minlength="3"
+        #nombreInput="ngModel"
+        [ngClass]="{
+          'is-invalid': nombreInput.invalid && (nombreInput.dirty || nombreInput.touched),
+        }"
+      />
+      <div
+        *ngIf="nombreInput.invalid && (nombreInput.dirty || nombreInput.touched)"
+        class="invalid-feedback mb-2"
+      >
+        <span *ngIf="nombreInput.errors?.['required']">El nombre del rol es obligatorio.</span>
+        <span *ngIf="nombreInput.errors?.['minlength']">Debe tener al menos 3 caracteres.</span>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="rolForm.invalid">Guardar</button>
+
+    <button
+      type="button"
+      class="btn btn-secondary ms-2"
+      (click)="limpiar(rolForm)"
+      *ngIf="rol.rolId || rolForm.dirty"
+    >
+      Cancelar
+    </button>
+
     <div *ngIf="mensajeExito" class="alert alert-success mt-3" role="alert">
       {{ mensajeAccion }}
     </div>
